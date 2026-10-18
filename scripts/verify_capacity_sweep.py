@@ -79,7 +79,7 @@ def check_belady(run, manifest, source, initial, masks):
                 belady_deduplicated_loads_verified=loads)
 
 
-def check_run(entry):
+def check_run(entry, expected_batch_size=4):
     run=Path(entry['run_dir'])
     manifest=RunManifest.model_validate_json((run/'manifest.json').read_text())
     summary=json.loads((run/'summary.json').read_text())
@@ -91,12 +91,14 @@ def check_run(entry):
     assert digest_file(run/'manifest.json')==entry['manifest_sha256']
     assert digest_file(run/'summary.json')==entry['summary_sha256']
     assert manifest.config.cache.capacity_units==entry['capacity_units']
-    assert manifest.config.scheduler.batch_size==4
+    batch=manifest.config.scheduler.batch_size
+    assert batch==entry.get('batch_size',expected_batch_size)==expected_batch_size
     assert manifest.config.scheduler.request_offset==20
     assert manifest.config.scheduler.max_requests is None and manifest.config.scheduler.max_tokens is None
     assert manifest.config.cache.default_expert_units==1 and not manifest.config.cache.expert_sizes
     requests=manifest.requests['evaluation']; spec=manifest.dataset
     assert len(requests)==80 and all(r.token_count==512 for r in requests)
+    assert len(requests)%batch==0, 'This fixed-shape audit requires full equal-length batches'
     assert len(spec.valid_layers)==40 and spec.num_experts==256 and spec.top_k==6
     source=np.stack([np.load(Path(manifest.config.dataset).parent/r.route_file,allow_pickle=False)[:,spec.valid_layers,:]
                      for r in requests])
@@ -110,8 +112,8 @@ def check_run(entry):
         l=layers[chunk['layer_id']]
         assert np.all(l>=0)
         assert np.array_equal(chunk['expert_ids'],source[r,t,l])
-        assert np.array_equal(chunk['step_id'],r//4*512+t)
-        ordered=((r//4*512+t)*40+l)*4+r%4
+        assert np.array_equal(chunk['step_id'],r//batch*512+t)
+        ordered=((r//batch*512+t)*40+l)*batch+r%batch
         assert np.array_equal(ordered,np.arange(offset,offset+len(chunk)))
         offset+=len(chunk)
         keys=(r*512+t)*40+l
@@ -123,6 +125,7 @@ def check_run(entry):
     assert np.all(seen)
     total=int(histogram.sum()); assert total==1638400
     hit=summary['hit_rate']; assert total==hit['count']
+    assert hit==entry['hit_rate'] and summary['transfer']==entry['transfer']
     mean=float(sum(i*int(c) for i,c in enumerate(histogram))/(6*total))
     assert abs(hit['mean']-mean)<1e-12
     def descending_rank(rank):
@@ -152,8 +155,8 @@ def check_run(entry):
         transfer=summary['transfer']; phase=transfer['phases']['evaluation']
         assert phase['prefetch_units']==phase['adaptation_units']==phase['other_units']==0
         assert phase['load_count']==phase['demand_units']==transfer['evaluation_unique_miss_demands']==extra['belady_deduplicated_loads_verified']
-    print(f"VERIFIED {entry['policy']} {entry['cache_percent']}%: {mean:.8f}, all {total} annotations",flush=True)
-    return dict(policy=entry['policy'],cache_percent=entry['cache_percent'],annotated_decisions=total,
+    print(f"VERIFIED {entry['policy']} BS={batch} {entry['cache_percent']}%: {mean:.8f}, all {total} annotations",flush=True)
+    return dict(policy=entry['policy'],batch_size=batch,cache_percent=entry['cache_percent'],annotated_decisions=total,
                 hit_count_histogram=histogram.tolist(),mean_independently_recomputed=mean,
                 all_routes_match=True,coverage_complete=True,descending_percentiles_verified=True,
                 initialization_verified=True,**extra)
@@ -175,7 +178,7 @@ def main():
         revisions.setdefault(e['policy'],set()).add(m.framework_revision)
         policy_hashes.setdefault(e['policy'],set()).add(m.inputs['policy_implementation']['source_sha256'])
     assert all(len(v)==1 for v in revisions.values()) and all(len(v)==1 for v in policy_hashes.values())
-    checks=[check_run(e) for e in entries]
+    checks=[check_run(e,report['experiment']['batch_size']) for e in entries]
     write_json(args.output,dict(verified_runs=len(checks),verified_decisions=sum(c['annotated_decisions'] for c in checks),checks=checks))
 
 

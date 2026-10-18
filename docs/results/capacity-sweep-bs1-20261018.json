@@ -1,0 +1,1073 @@
+{
+  "created_at_utc": "2026-10-18T03:44:42.417127+00:00",
+  "elapsed_seconds": 676.67,
+  "experiment": {
+    "expert_count": 10240,
+    "valid_layers": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+    ],
+    "num_experts_per_layer": 256,
+    "batch_size": 1,
+    "profile_requests": 20,
+    "evaluation_requests": 80,
+    "max_tokens_per_request": 512,
+    "expected_decisions_per_run": 1638400,
+    "percentile_order": "descending",
+    "expert_size_units": 1,
+    "workspace_units": 1
+  },
+  "results": [
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 10,
+      "capacity_units": 1024,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-10pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "05c8f2a940e806ce653c9209ffa081c36e602125472922307e6e64140c3ad4fe",
+      "summary_sha256": "9abe86c72b38b3d51953dc81d766884658f6364acc5c5315a0e647d7565effc2",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 1638400
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.8333333333333334,
+        "p90": 0.5,
+        "p99": 0.16666666666666666,
+        "mean": 0.7815506998697915,
+        "median": 0.8333333333333334
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 1024,
+            "units": 1024,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 1024,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 2147444,
+            "units": 2147444,
+            "demand_units": 2147444,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 1369189
+          }
+        },
+        "total_units": 2148468,
+        "evaluation_miss_occurrences": 2147444,
+        "evaluation_unique_miss_demands": 2147444,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 10,
+      "capacity_units": 1024,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-10pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "7cab59459cb50d07807367291ffbdc1c8a8156b64a136409ca9003fc15ecd839",
+      "summary_sha256": "bebfc48e02dc15d203f777861dcb045c023a60a1b579ea97081230ebbc148b0c",
+      "requests": 80,
+      "visibility": "causal",
+      "policy_metadata": {
+        "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+        "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+        "variant": "synchronous_residency_policy",
+        "clock_unit": "decode_step",
+        "tie_break": "layer_id_then_expert_id",
+        "score_dtype": "float32",
+        "params": {
+          "adapt_every": 4,
+          "decay": 0.7,
+          "min_count": 2.0,
+          "min_gain": 1.5,
+          "max_swaps": 96
+        },
+        "adaptations": 10240,
+        "swaps": 588663,
+        "limitations": [
+          "No MTP verification-window trace",
+          "All misses use streamed weight loading; no CPU expert execution",
+          "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+        ]
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 0.8333333333333334,
+        "p50": 0.5,
+        "p90": 0.16666666666666666,
+        "p99": 0.0,
+        "mean": 0.5747809855143229,
+        "median": 0.5
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 1024,
+            "units": 1024,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 1024,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 4768736,
+            "units": 4768736,
+            "demand_units": 4180073,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 588663,
+            "other_units": 0,
+            "evictions": 588663
+          }
+        },
+        "total_units": 4769760,
+        "evaluation_miss_occurrences": 4180073,
+        "evaluation_unique_miss_demands": 4180073,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 15,
+      "capacity_units": 1536,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-15pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "dcf3ea840abb018598abc703cc8c3f91a4cd7adc8b0374d73b2581b45756b69b",
+      "summary_sha256": "90beab17e560c9a5d1cb39e51c6a9d20fbea735859a89109025e59278518d3f8",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 1638400
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.8333333333333334,
+        "p90": 0.6666666666666666,
+        "p99": 0.3333333333333333,
+        "mean": 0.845960896809896,
+        "median": 0.8333333333333334
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 1536,
+            "units": 1536,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 1536,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 1514266,
+            "units": 1514266,
+            "demand_units": 1514266,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 1043636
+          }
+        },
+        "total_units": 1515802,
+        "evaluation_miss_occurrences": 1514266,
+        "evaluation_unique_miss_demands": 1514266,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 15,
+      "capacity_units": 1536,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-15pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "fdc11477d2759ec5d3ca593121247f1ad9cbe2ec741a38f53d8fd5a9061f489c",
+      "summary_sha256": "4b43de6cf4f5e101449b88eccf5cac2f1193d3587b83028765a4cbf10a06e34f",
+      "requests": 80,
+      "visibility": "causal",
+      "policy_metadata": {
+        "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+        "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+        "variant": "synchronous_residency_policy",
+        "clock_unit": "decode_step",
+        "tie_break": "layer_id_then_expert_id",
+        "score_dtype": "float32",
+        "params": {
+          "adapt_every": 4,
+          "decay": 0.7,
+          "min_count": 2.0,
+          "min_gain": 1.5,
+          "max_swaps": 96
+        },
+        "adaptations": 10240,
+        "swaps": 464454,
+        "limitations": [
+          "No MTP verification-window trace",
+          "All misses use streamed weight loading; no CPU expert execution",
+          "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+        ]
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.6666666666666666,
+        "p90": 0.3333333333333333,
+        "p99": 0.0,
+        "mean": 0.6619581095377605,
+        "median": 0.6666666666666666
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 1536,
+            "units": 1536,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 1536,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 3787541,
+            "units": 3787541,
+            "demand_units": 3323087,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 464454,
+            "other_units": 0,
+            "evictions": 464454
+          }
+        },
+        "total_units": 3789077,
+        "evaluation_miss_occurrences": 3323087,
+        "evaluation_unique_miss_demands": 3323087,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 25,
+      "capacity_units": 2560,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-25pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "ce82853a6947a0209970b21d8e9291ad31f6f8b5c8184c55d229bb271c103168",
+      "summary_sha256": "67ce9e98d72f9f90c21792aae3fe043d73cf2b94f16b5acc0d6ae26a56908bc2",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 1638400
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 1.0,
+        "p90": 0.6666666666666666,
+        "p99": 0.5,
+        "mean": 0.9141287231445312,
+        "median": 1.0
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 2560,
+            "units": 2560,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 2560,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 844149,
+            "units": 844149,
+            "demand_units": 844149,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 644614
+          }
+        },
+        "total_units": 846709,
+        "evaluation_miss_occurrences": 844149,
+        "evaluation_unique_miss_demands": 844149,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 25,
+      "capacity_units": 2560,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-25pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "08be262a5ee23b78658ab89c0c434c45e533f17ae970879d2e825b3a1085e4bc",
+      "summary_sha256": "dbf79f941c515ef75950fe175679e4de45cfe011b2ebe693f3fb8b01692dbaf0",
+      "requests": 80,
+      "visibility": "causal",
+      "policy_metadata": {
+        "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+        "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+        "variant": "synchronous_residency_policy",
+        "clock_unit": "decode_step",
+        "tie_break": "layer_id_then_expert_id",
+        "score_dtype": "float32",
+        "params": {
+          "adapt_every": 4,
+          "decay": 0.7,
+          "min_count": 2.0,
+          "min_gain": 1.5,
+          "max_swaps": 96
+        },
+        "adaptations": 10240,
+        "swaps": 297403,
+        "limitations": [
+          "No MTP verification-window trace",
+          "All misses use streamed weight loading; no CPU expert execution",
+          "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+        ]
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.8333333333333334,
+        "p90": 0.5,
+        "p99": 0.16666666666666666,
+        "mean": 0.766925760904948,
+        "median": 0.8333333333333334
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 2560,
+            "units": 2560,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 2560,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 2588616,
+            "units": 2588616,
+            "demand_units": 2291213,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 297403,
+            "other_units": 0,
+            "evictions": 297403
+          }
+        },
+        "total_units": 2591176,
+        "evaluation_miss_occurrences": 2291213,
+        "evaluation_unique_miss_demands": 2291213,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 30,
+      "capacity_units": 3072,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-30pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "287f051640d2f7d3c8cd5ce627014b715b56dc488327b3d8dd6093ea07cdcd10",
+      "summary_sha256": "4eec8a3e1e1ee4c34f66ada98eb8c3d0c53561a83aaee5173959a71e04567449",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 1638400
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 1.0,
+        "p90": 0.8333333333333334,
+        "p99": 0.5,
+        "mean": 0.9345208740234375,
+        "median": 1.0
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 3072,
+            "units": 3072,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 3072,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 643686,
+            "units": 643686,
+            "demand_units": 643686,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 512236
+          }
+        },
+        "total_units": 646758,
+        "evaluation_miss_occurrences": 643686,
+        "evaluation_unique_miss_demands": 643686,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 30,
+      "capacity_units": 3072,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-30pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "237ee8f9de716f90e37c389c49975479f88849977a4ff4dcfa3b44b8727b7d4b",
+      "summary_sha256": "645f03b5095972f26c4151971813dc9a2c719c1f5697bffef7b8c41a4ba2b92c",
+      "requests": 80,
+      "visibility": "causal",
+      "policy_metadata": {
+        "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+        "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+        "variant": "synchronous_residency_policy",
+        "clock_unit": "decode_step",
+        "tie_break": "layer_id_then_expert_id",
+        "score_dtype": "float32",
+        "params": {
+          "adapt_every": 4,
+          "decay": 0.7,
+          "min_count": 2.0,
+          "min_gain": 1.5,
+          "max_swaps": 96
+        },
+        "adaptations": 10240,
+        "swaps": 246197,
+        "limitations": [
+          "No MTP verification-window trace",
+          "All misses use streamed weight loading; no CPU expert execution",
+          "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+        ]
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.8333333333333334,
+        "p90": 0.5,
+        "p99": 0.16666666666666666,
+        "mean": 0.8021261596679687,
+        "median": 0.8333333333333334
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 3072,
+            "units": 3072,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 3072,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 2191376,
+            "units": 2191376,
+            "demand_units": 1945179,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 246197,
+            "other_units": 0,
+            "evictions": 246197
+          }
+        },
+        "total_units": 2194448,
+        "evaluation_miss_occurrences": 1945179,
+        "evaluation_unique_miss_demands": 1945179,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 35,
+      "capacity_units": 3584,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-35pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "23d7b6009b8dc2f9d41bce6d45ff761bb7a4afba9537345ad1dc45c0aeea7633",
+      "summary_sha256": "4b21074b4f1c9855661240b70e0ae63908408f433821d511603d367b66869c27",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 1638400
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 1.0,
+        "p90": 0.8333333333333334,
+        "p99": 0.6666666666666666,
+        "mean": 0.9496627807617187,
+        "median": 1.0
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 3584,
+            "units": 3584,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 3584,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 494835,
+            "units": 494835,
+            "demand_units": 494835,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 407774
+          }
+        },
+        "total_units": 498419,
+        "evaluation_miss_occurrences": 494835,
+        "evaluation_unique_miss_demands": 494835,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 35,
+      "capacity_units": 3584,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-35pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "f0755abaa62c0f2655af74da9f0f577ffb614f6b230f452db1fe8d1ee9e90007",
+      "summary_sha256": "15fb9d5aab70d519a4a8060089cb96082c1722f015dc0a8286060e8cd0991726",
+      "requests": 80,
+      "visibility": "causal",
+      "policy_metadata": {
+        "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+        "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+        "variant": "synchronous_residency_policy",
+        "clock_unit": "decode_step",
+        "tie_break": "layer_id_then_expert_id",
+        "score_dtype": "float32",
+        "params": {
+          "adapt_every": 4,
+          "decay": 0.7,
+          "min_count": 2.0,
+          "min_gain": 1.5,
+          "max_swaps": 96
+        },
+        "adaptations": 10240,
+        "swaps": 204563,
+        "limitations": [
+          "No MTP verification-window trace",
+          "All misses use streamed weight loading; no CPU expert execution",
+          "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+        ]
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.8333333333333334,
+        "p90": 0.6666666666666666,
+        "p99": 0.3333333333333333,
+        "mean": 0.8321865844726563,
+        "median": 0.8333333333333334
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 3584,
+            "units": 3584,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 3584,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 1854236,
+            "units": 1854236,
+            "demand_units": 1649673,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 204563,
+            "other_units": 0,
+            "evictions": 204563
+          }
+        },
+        "total_units": 1857820,
+        "evaluation_miss_occurrences": 1649673,
+        "evaluation_unique_miss_demands": 1649673,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 50,
+      "capacity_units": 5120,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-50pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "3c0c55b5cd8897b5c3454d5329bae11e7995b3700cd41b803005c76fecb2929a",
+      "summary_sha256": "389fe6cb55362a9797d1326e7c189640ac1af0e0fe9387b22e0e2c6de14596c3",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 1638400
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 1.0,
+        "p90": 0.8333333333333334,
+        "p99": 0.6666666666666666,
+        "mean": 0.9769614664713541,
+        "median": 1.0
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 5120,
+            "units": 5120,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 5120,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 226478,
+            "units": 226478,
+            "demand_units": 226478,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 199130
+          }
+        },
+        "total_units": 231598,
+        "evaluation_miss_occurrences": 226478,
+        "evaluation_unique_miss_demands": 226478,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 50,
+      "capacity_units": 5120,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-50pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "9139f384b3b541a71edb724ff6b9fb8d948324b9836bde9a0c813d09fec232ea",
+      "summary_sha256": "2fa27cf3e400e276f515fa45d117f3be336ba073bd247c670627ad31bacd98b5",
+      "requests": 80,
+      "visibility": "causal",
+      "policy_metadata": {
+        "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+        "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+        "variant": "synchronous_residency_policy",
+        "clock_unit": "decode_step",
+        "tie_break": "layer_id_then_expert_id",
+        "score_dtype": "float32",
+        "params": {
+          "adapt_every": 4,
+          "decay": 0.7,
+          "min_count": 2.0,
+          "min_gain": 1.5,
+          "max_swaps": 96
+        },
+        "adaptations": 10240,
+        "swaps": 111373,
+        "limitations": [
+          "No MTP verification-window trace",
+          "All misses use streamed weight loading; no CPU expert execution",
+          "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+        ]
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 1.0,
+        "p90": 0.6666666666666666,
+        "p99": 0.5,
+        "mean": 0.9031864420572917,
+        "median": 1.0
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 5120,
+            "units": 5120,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 5120,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 1063089,
+            "units": 1063089,
+            "demand_units": 951716,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 111373,
+            "other_units": 0,
+            "evictions": 111373
+          }
+        },
+        "total_units": 1068209,
+        "evaluation_miss_occurrences": 951716,
+        "evaluation_unique_miss_demands": 951716,
+        "evaluation_coalesced_miss_occurrences": 0
+      }
+    }
+  ],
+  "framework_revisions": [
+    "f80ef9eccd7f4255a62539550483bc75bf40fc8a"
+  ],
+  "policy_source_sha256": {
+    "belady": "20ba56dd107cb933a723dccd271660853faa01db5e67866df22cd4a21977b6e6",
+    "strata": "c66f7d491c1279c52a2aa99db97f2a438599bc84fab04aab30039f840e8fec9d"
+  },
+  "source_fingerprint_variants": [
+    "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c"
+  ],
+  "belady_scope": {
+    "visibility": "oracle",
+    "objective": "deduplicated_demand_loads",
+    "assumptions": [
+      "uniform_expert_size",
+      "global_pool",
+      "demand_only_admission",
+      "bypass_allowed",
+      "fixed_initial_residency",
+      "batch_snapshot"
+    ],
+    "occurrence_weighted_hit_rate_is_strict_upper_bound": false
+  }
+}

@@ -428,3 +428,18 @@ PYTHONPATH=src python scripts/verify_capacity_sweep.py runs/capacity-sweep-new/r
 每组有 1,638,400 条标注，三种策略共 18 组、29,491,200 条，耗时和磁盘占用显著高于 smoke。`--policies lfu strata` 可选择策略，`--extend-report` 可保留旧报告并追加其他策略。可用 `--dataset` 和 `--profile` 指向输入的本地副本。建议使用已完整下载的本地磁盘目录；云盘占位文件可能阻塞读写或校验。
 
 已完成实验的汇总与独立核验报告见 [容量扫描结果](docs/results/capacity-sweep-20261018.md)。完整运行输出放在被 Git 忽略的 `runs/` 或指定目录；脚本、配置和精简结果报告纳入版本管理。
+
+### Batch size 对比
+
+沿用相同 profile、留出请求和缓存容量，仅将 batch size 改为 1，补测 Strata 与 Belady：
+
+```bash
+PYTHONPATH=src python scripts/capacity_sweep.py --batch-size 1 --policies strata belady --workers 3 --output runs/capacity-sweep-bs1
+PYTHONPATH=src python scripts/verify_capacity_sweep.py runs/capacity-sweep-bs1/results.json --output runs/capacity-sweep-bs1/verification.json
+```
+
+不同 batch size 使用独立输出目录与报告。扫描进度按实际调度计算总步数；当前完整留出集 BS=1 为 40,960 步，BS=4 为 10,240 步。Strata 的调整间隔仍为每 4 个 decode step，不按 batch size 缩放。
+
+对比结果、去重与适应性换入分解、复现命令见 [BS=1 与 BS=4 对比](docs/results/batch-size-bs1-vs-bs4-20261018.md)。`scripts/compare_batch_sizes.py` 会逐对检查两组实验的配置、完整初始状态、请求与策略源码，并生成 Markdown / JSON 对比报告；它需要两份报告所引用的完整运行目录。
+
+完整实验输出与输入副本已归档到 `runs/archive/20261018/`，共 30 组运行；逐文件 SHA-256、原始路径及归档位置见 [归档清单](docs/results/benchmark-archive-20261018.json)。Git 保存报告与清单，原始 detail 保留在本地被忽略的 `runs/` 目录。

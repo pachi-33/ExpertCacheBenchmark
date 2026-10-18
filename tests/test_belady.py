@@ -133,12 +133,15 @@ class BeladyTests(Fixture):
         spec.loader.exec_module(audit)
         traces=[[[[i%3],[(i+1)%3]], [[(i+1)%3],[i%3]], [[i%3],[i%3]]] for i in range(4)]
         path=self.dataset(traces)
-        _,reader,output=self.belady(path,capacity=2,initial=((0,0),(1,1)),scheduler=SchedulerConfig(batch_size=2))
         source=np.asarray(traces,dtype=np.uint8)
-        initial=json.loads((output/"initial_state.json").read_text())
-        masks=np.concatenate([a['hit_mask'] for _,a in reader.access_chunks()])
-        result=audit.check_belady(output,reader.manifest,source,initial,masks)
-        self.assertEqual(result['belady_greedy_boundaries_verified'],12)
-        masks[0,0]=~masks[0,0]
-        with self.assertRaisesRegex(AssertionError,'snapshot'):
-            audit.check_belady(output,reader.manifest,source,initial,masks)
+        for batch in (1,2,4):
+            with self.subTest(batch_size=batch):
+                _,reader,output=self.belady(path,capacity=2,initial=((0,0),(1,1)),
+                                           name=f'audit-bs{batch}',scheduler=SchedulerConfig(batch_size=batch))
+                initial=json.loads((output/"initial_state.json").read_text())
+                masks=np.concatenate([a['hit_mask'] for _,a in reader.access_chunks()])
+                result=audit.check_belady(output,reader.manifest,source,initial,masks)
+                self.assertEqual(result['belady_greedy_boundaries_verified'],24//batch)
+                masks[0,0]=~masks[0,0]
+                with self.assertRaisesRegex(AssertionError,'snapshot'):
+                    audit.check_belady(output,reader.manifest,source,initial,masks)

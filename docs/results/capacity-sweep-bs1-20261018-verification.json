@@ -1,0 +1,266 @@
+{
+  "verified_runs": 12,
+  "verified_decisions": 19660800,
+  "report_sha256": "5e4248717f64c607c6c97d8fe820af7f54b763b7085e89eca4e5ae674b1d2c73",
+  "audit_script_sha256": "c2149303ede54eff47dd97ff3ccdcd6ec54ab4fada8dd801b16003de7642f167",
+  "checks": [
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 10,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        4431,
+        18337,
+        63261,
+        174264,
+        362195,
+        528947,
+        486965
+      ],
+      "mean_independently_recomputed": 0.7815506998697916,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 1638400,
+      "belady_greedy_boundaries_verified": 1638400,
+      "belady_deduplicated_loads_verified": 2147444
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 10,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        38881,
+        131555,
+        273362,
+        383082,
+        384756,
+        276806,
+        149958
+      ],
+      "mean_independently_recomputed": 0.5747809855143229,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 15,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        1878,
+        7325,
+        27223,
+        95056,
+        266902,
+        538509,
+        701507
+      ],
+      "mean_independently_recomputed": 0.8459608968098958,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 1638400,
+      "belady_greedy_boundaries_verified": 1638400,
+      "belady_deduplicated_loads_verified": 1514266
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 15,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        17022,
+        67906,
+        174176,
+        317529,
+        419171,
+        393792,
+        248804
+      ],
+      "mean_independently_recomputed": 0.6619581095377605,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 25,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        439,
+        1923,
+        7463,
+        32426,
+        132659,
+        439452,
+        1024038
+      ],
+      "mean_independently_recomputed": 0.9141287231445312,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 1638400,
+      "belady_greedy_boundaries_verified": 1638400,
+      "belady_deduplicated_loads_verified": 844149
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 25,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        4704,
+        22401,
+        75333,
+        193021,
+        375154,
+        520281,
+        447506
+      ],
+      "mean_independently_recomputed": 0.7669257609049479,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 30,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        229,
+        1081,
+        4219,
+        19582,
+        92254,
+        376777,
+        1144258
+      ],
+      "mean_independently_recomputed": 0.9345208740234375,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 1638400,
+      "belady_greedy_boundaries_verified": 1638400,
+      "belady_deduplicated_loads_verified": 643686
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 30,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        2721,
+        13837,
+        50797,
+        148326,
+        333798,
+        543906,
+        545015
+      ],
+      "mean_independently_recomputed": 0.8021261596679687,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 35,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        124,
+        637,
+        2534,
+        12110,
+        64293,
+        315854,
+        1242848
+      ],
+      "mean_independently_recomputed": 0.9496627807617187,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 1638400,
+      "belady_greedy_boundaries_verified": 1638400,
+      "belady_deduplicated_loads_verified": 494835
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 35,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        1540,
+        8295,
+        33796,
+        111401,
+        289034,
+        551503,
+        642831
+      ],
+      "mean_independently_recomputed": 0.8321865844726563,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "belady",
+      "batch_size": 1,
+      "cache_percent": 50,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        21,
+        119,
+        477,
+        2769,
+        20735,
+        174072,
+        1440207
+      ],
+      "mean_independently_recomputed": 0.9769614664713542,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 1638400,
+      "belady_greedy_boundaries_verified": 1638400,
+      "belady_deduplicated_loads_verified": 226478
+    },
+    {
+      "policy": "strata",
+      "batch_size": 1,
+      "cache_percent": 50,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        218,
+        1561,
+        8228,
+        38427,
+        155288,
+        483834,
+        950844
+      ],
+      "mean_independently_recomputed": 0.9031864420572917,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    }
+  ]
+}

@@ -1,0 +1,1308 @@
+{
+  "schema_version": "1.0",
+  "created_at_utc": "2026-10-18T03:45:28.187799+00:00",
+  "candidate_batch_size": 1,
+  "baseline_batch_size": 4,
+  "inputs": {
+    "baseline": {
+      "path": "/Users/yaobao/Desktop/Workspace-Ascend/ExpertCacheBenchmark/docs/results/capacity-sweep-20261018.json",
+      "sha256": "2b0d29b724364b9fce63f7caecf665e025b596ce9256ca4dd483f76fa2272e2c"
+    },
+    "candidate": {
+      "path": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/results.json",
+      "sha256": "5e4248717f64c607c6c97d8fe820af7f54b763b7085e89eca4e5ae674b1d2c73"
+    },
+    "verification": {
+      "path": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/verification.json",
+      "sha256": "d780eb47eb55637a87dc7cea81ec4e0f8f800e96805bf8c31cd17f32f37a92e9"
+    }
+  },
+  "candidate_sweep_elapsed_seconds": 676.67,
+  "comparison_scope": "Same traces, request order, initialization, capacity and policy; only scheduler batch size changes",
+  "comparisons": [
+    {
+      "policy": "belady",
+      "cache_percent": 10,
+      "capacity_units": 1024,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.5,
+          "p99": 0.16666666666666666,
+          "mean": 0.7815506998697915,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 2147444,
+          "units": 2147444,
+          "demand_units": 2147444,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 1369189
+        },
+        "evaluation_units_per_output_token": 52.42783203125,
+        "miss_occurrences": 2147444,
+        "unique_miss_demands": 2147444,
+        "coalesced_misses": 0,
+        "initial_units": 1024,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 1638400
+        },
+        "elapsed_seconds": 148.85
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.6666666666666666,
+          "p90": 0.3333333333333333,
+          "p99": 0.16666666666666666,
+          "mean": 0.6827702840169272,
+          "median": 0.6666666666666666
+        },
+        "evaluation": {
+          "load_count": 3014275,
+          "units": 3014275,
+          "demand_units": 3014275,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 1536225
+        },
+        "evaluation_units_per_output_token": 73.5906982421875,
+        "miss_occurrences": 3118495,
+        "unique_miss_demands": 3014275,
+        "coalesced_misses": 104220,
+        "initial_units": 1024,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 409600
+        },
+        "elapsed_seconds": 103.88
+      },
+      "hit_rate_delta_pp": 9.878041585286434,
+      "evaluation_units_delta_percent": -28.75752875898848,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-10pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-10pct"
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 15,
+      "capacity_units": 1536,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.6666666666666666,
+          "p99": 0.3333333333333333,
+          "mean": 0.845960896809896,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 1514266,
+          "units": 1514266,
+          "demand_units": 1514266,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 1043636
+        },
+        "evaluation_units_per_output_token": 36.969384765625,
+        "miss_occurrences": 1514266,
+        "unique_miss_demands": 1514266,
+        "coalesced_misses": 0,
+        "initial_units": 1536,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 1638400
+        },
+        "elapsed_seconds": 154.9
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.5,
+          "p99": 0.16666666666666666,
+          "mean": 0.7723959350585937,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 2177182,
+          "units": 2177182,
+          "demand_units": 2177182,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 1277007
+        },
+        "evaluation_units_per_output_token": 53.153857421875,
+        "miss_occurrences": 2237439,
+        "unique_miss_demands": 2177182,
+        "coalesced_misses": 60257,
+        "initial_units": 1536,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 409600
+        },
+        "elapsed_seconds": 89.76
+      },
+      "hit_rate_delta_pp": 7.356496175130223,
+      "evaluation_units_delta_percent": -30.44835020682699,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-15pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-15pct"
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 25,
+      "capacity_units": 2560,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.6666666666666666,
+          "p99": 0.5,
+          "mean": 0.9141287231445312,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 844149,
+          "units": 844149,
+          "demand_units": 844149,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 644614
+        },
+        "evaluation_units_per_output_token": 20.6091064453125,
+        "miss_occurrences": 844149,
+        "unique_miss_demands": 844149,
+        "coalesced_misses": 0,
+        "initial_units": 2560,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 1638400
+        },
+        "elapsed_seconds": 147.98
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.6666666666666666,
+          "p99": 0.3333333333333333,
+          "mean": 0.8700275675455729,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 1251830,
+          "units": 1251830,
+          "demand_units": 1251830,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 847930
+        },
+        "evaluation_units_per_output_token": 30.562255859375,
+        "miss_occurrences": 1277681,
+        "unique_miss_demands": 1251830,
+        "coalesced_misses": 25851,
+        "initial_units": 2560,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 409600
+        },
+        "elapsed_seconds": 75.79
+      },
+      "hit_rate_delta_pp": 4.410115559895833,
+      "evaluation_units_delta_percent": -32.56680220157689,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-25pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-25pct"
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 30,
+      "capacity_units": 3072,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.8333333333333334,
+          "p99": 0.5,
+          "mean": 0.9345208740234375,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 643686,
+          "units": 643686,
+          "demand_units": 643686,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 512236
+        },
+        "evaluation_units_per_output_token": 15.714990234375,
+        "miss_occurrences": 643686,
+        "unique_miss_demands": 643686,
+        "coalesced_misses": 0,
+        "initial_units": 3072,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 1638400
+        },
+        "elapsed_seconds": 142.22
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.6666666666666666,
+          "p99": 0.5,
+          "mean": 0.9003151448567708,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 962182,
+          "units": 962182,
+          "demand_units": 962182,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 682454
+        },
+        "evaluation_units_per_output_token": 23.490771484375,
+        "miss_occurrences": 979942,
+        "unique_miss_demands": 962182,
+        "coalesced_misses": 17760,
+        "initial_units": 3072,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 409600
+        },
+        "elapsed_seconds": 78.09
+      },
+      "hit_rate_delta_pp": 3.4205729166666754,
+      "evaluation_units_delta_percent": -33.10142987501325,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-30pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-30pct"
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 35,
+      "capacity_units": 3584,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.8333333333333334,
+          "p99": 0.6666666666666666,
+          "mean": 0.9496627807617187,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 494835,
+          "units": 494835,
+          "demand_units": 494835,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 407774
+        },
+        "evaluation_units_per_output_token": 12.0809326171875,
+        "miss_occurrences": 494835,
+        "unique_miss_demands": 494835,
+        "coalesced_misses": 0,
+        "initial_units": 3584,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 1638400
+        },
+        "elapsed_seconds": 146.72
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.8333333333333334,
+          "p99": 0.5,
+          "mean": 0.9233446248372397,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 741082,
+          "units": 741082,
+          "demand_units": 741082,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 545478
+        },
+        "evaluation_units_per_output_token": 18.092822265625,
+        "miss_occurrences": 753553,
+        "unique_miss_demands": 741082,
+        "coalesced_misses": 12471,
+        "initial_units": 3584,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 409600
+        },
+        "elapsed_seconds": 74.35
+      },
+      "hit_rate_delta_pp": 2.631815592447906,
+      "evaluation_units_delta_percent": -33.22803684342623,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-35pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-35pct"
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 50,
+      "capacity_units": 5120,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.8333333333333334,
+          "p99": 0.6666666666666666,
+          "mean": 0.9769614664713541,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 226478,
+          "units": 226478,
+          "demand_units": 226478,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 199130
+        },
+        "evaluation_units_per_output_token": 5.529248046875,
+        "miss_occurrences": 226478,
+        "unique_miss_demands": 226478,
+        "coalesced_misses": 0,
+        "initial_units": 5120,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 1638400
+        },
+        "elapsed_seconds": 139.36
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.8333333333333334,
+          "p99": 0.6666666666666666,
+          "mean": 0.9667051188151042,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 322721,
+          "units": 322721,
+          "demand_units": 322721,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 0,
+          "other_units": 0,
+          "evictions": 258512
+        },
+        "evaluation_units_per_output_token": 7.8789306640625,
+        "miss_occurrences": 327302,
+        "unique_miss_demands": 322721,
+        "coalesced_misses": 4581,
+        "initial_units": 5120,
+        "policy_metadata": {
+          "variant": "batched_belady_min_with_bypass",
+          "requires_visibility": "oracle",
+          "objective": "deduplicated_demand_loads",
+          "admission": "demand_only",
+          "allocation": "global",
+          "expert_sizes": "uniform",
+          "batch_hits": "pre_demand_snapshot",
+          "occurrence_weighted_hit_rate_optimal": false,
+          "indexed_batch_layers": 409600
+        },
+        "elapsed_seconds": 66.44
+      },
+      "hit_rate_delta_pp": 1.0256347656249831,
+      "evaluation_units_delta_percent": -29.822354293646836,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-50pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/belady-50pct"
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 10,
+      "capacity_units": 1024,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 0.8333333333333334,
+          "p50": 0.5,
+          "p90": 0.16666666666666666,
+          "p99": 0.0,
+          "mean": 0.5747809855143229,
+          "median": 0.5
+        },
+        "evaluation": {
+          "load_count": 4768736,
+          "units": 4768736,
+          "demand_units": 4180073,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 588663,
+          "other_units": 0,
+          "evictions": 588663
+        },
+        "evaluation_units_per_output_token": 116.42421875,
+        "miss_occurrences": 4180073,
+        "unique_miss_demands": 4180073,
+        "coalesced_misses": 0,
+        "initial_units": 1024,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 10240,
+          "swaps": 588663,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 187.68
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 0.8333333333333334,
+          "p50": 0.5,
+          "p90": 0.16666666666666666,
+          "p99": 0.0,
+          "mean": 0.4876620483398437,
+          "median": 0.5
+        },
+        "evaluation": {
+          "load_count": 5062875,
+          "units": 5062875,
+          "demand_units": 4841899,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 220976,
+          "other_units": 0,
+          "evictions": 220976
+        },
+        "evaluation_units_per_output_token": 123.6053466796875,
+        "miss_occurrences": 5036487,
+        "unique_miss_demands": 4841899,
+        "coalesced_misses": 194588,
+        "initial_units": 1024,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 2560,
+          "swaps": 220976,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 148.9
+      },
+      "hit_rate_delta_pp": 8.711893717447916,
+      "evaluation_units_delta_percent": -5.809722736587409,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-capacity-sweep/strata-10pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-10pct"
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 15,
+      "capacity_units": 1536,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.6666666666666666,
+          "p90": 0.3333333333333333,
+          "p99": 0.0,
+          "mean": 0.6619581095377605,
+          "median": 0.6666666666666666
+        },
+        "evaluation": {
+          "load_count": 3787541,
+          "units": 3787541,
+          "demand_units": 3323087,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 464454,
+          "other_units": 0,
+          "evictions": 464454
+        },
+        "evaluation_units_per_output_token": 92.4692626953125,
+        "miss_occurrences": 3323087,
+        "unique_miss_demands": 3323087,
+        "coalesced_misses": 0,
+        "initial_units": 1536,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 10240,
+          "swaps": 464454,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 174.51
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 0.8333333333333334,
+          "p50": 0.6666666666666666,
+          "p90": 0.3333333333333333,
+          "p99": 0.0,
+          "mean": 0.583896993001302,
+          "median": 0.6666666666666666
+        },
+        "evaluation": {
+          "load_count": 4192990,
+          "units": 4192990,
+          "demand_units": 3953548,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 239442,
+          "other_units": 0,
+          "evictions": 239442
+        },
+        "evaluation_units_per_output_token": 102.367919921875,
+        "miss_occurrences": 4090459,
+        "unique_miss_demands": 3953548,
+        "coalesced_misses": 136911,
+        "initial_units": 1536,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 2560,
+          "swaps": 239442,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 134.75
+      },
+      "hit_rate_delta_pp": 7.806111653645842,
+      "evaluation_units_delta_percent": -9.669686786755992,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-capacity-sweep/strata-15pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-15pct"
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 25,
+      "capacity_units": 2560,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.5,
+          "p99": 0.16666666666666666,
+          "mean": 0.766925760904948,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 2588616,
+          "units": 2588616,
+          "demand_units": 2291213,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 297403,
+          "other_units": 0,
+          "evictions": 297403
+        },
+        "evaluation_units_per_output_token": 63.1986328125,
+        "miss_occurrences": 2291213,
+        "unique_miss_demands": 2291213,
+        "coalesced_misses": 0,
+        "initial_units": 2560,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 10240,
+          "swaps": 297403,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 187.6
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.6666666666666666,
+          "p90": 0.5,
+          "p99": 0.16666666666666666,
+          "mean": 0.7175912475585937,
+          "median": 0.6666666666666666
+        },
+        "evaluation": {
+          "load_count": 2941788,
+          "units": 2941788,
+          "demand_units": 2700771,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 241017,
+          "other_units": 0,
+          "evictions": 241017
+        },
+        "evaluation_units_per_output_token": 71.82099609375,
+        "miss_occurrences": 2776191,
+        "unique_miss_demands": 2700771,
+        "coalesced_misses": 75420,
+        "initial_units": 2560,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 2560,
+          "swaps": 241017,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 122.97
+      },
+      "hit_rate_delta_pp": 4.93345133463543,
+      "evaluation_units_delta_percent": -12.005351847243917,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-capacity-sweep/strata-25pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-25pct"
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 30,
+      "capacity_units": 3072,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.5,
+          "p99": 0.16666666666666666,
+          "mean": 0.8021261596679687,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 2191376,
+          "units": 2191376,
+          "demand_units": 1945179,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 246197,
+          "other_units": 0,
+          "evictions": 246197
+        },
+        "evaluation_units_per_output_token": 53.500390625,
+        "miss_occurrences": 1945179,
+        "unique_miss_demands": 1945179,
+        "coalesced_misses": 0,
+        "initial_units": 3072,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 10240,
+          "swaps": 246197,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 183.33
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.5,
+          "p99": 0.16666666666666666,
+          "mean": 0.7671743774414063,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 2467924,
+          "units": 2467924,
+          "demand_units": 2231634,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 236290,
+          "other_units": 0,
+          "evictions": 236290
+        },
+        "evaluation_units_per_output_token": 60.25205078125,
+        "miss_occurrences": 2288769,
+        "unique_miss_demands": 2231634,
+        "coalesced_misses": 57135,
+        "initial_units": 3072,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 2560,
+          "swaps": 236290,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 123.04
+      },
+      "hit_rate_delta_pp": 3.495178222656248,
+      "evaluation_units_delta_percent": -11.20569353027079,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-capacity-sweep/strata-30pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-30pct"
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 35,
+      "capacity_units": 3584,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.6666666666666666,
+          "p99": 0.3333333333333333,
+          "mean": 0.8321865844726563,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 1854236,
+          "units": 1854236,
+          "demand_units": 1649673,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 204563,
+          "other_units": 0,
+          "evictions": 204563
+        },
+        "evaluation_units_per_output_token": 45.26943359375,
+        "miss_occurrences": 1649673,
+        "unique_miss_demands": 1649673,
+        "coalesced_misses": 0,
+        "initial_units": 3584,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 10240,
+          "swaps": 204563,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 175.05
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 0.8333333333333334,
+          "p90": 0.5,
+          "p99": 0.3333333333333333,
+          "mean": 0.809079081217448,
+          "median": 0.8333333333333334
+        },
+        "evaluation": {
+          "load_count": 2060507,
+          "units": 2060507,
+          "demand_units": 1833383,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 227124,
+          "other_units": 0,
+          "evictions": 227124
+        },
+        "evaluation_units_per_output_token": 50.3053466796875,
+        "miss_occurrences": 1876829,
+        "unique_miss_demands": 1833383,
+        "coalesced_misses": 43446,
+        "initial_units": 3584,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 2560,
+          "swaps": 227124,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 119.54
+      },
+      "hit_rate_delta_pp": 2.3107503255208273,
+      "evaluation_units_delta_percent": -10.010691543391992,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-capacity-sweep/strata-35pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-35pct"
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 50,
+      "capacity_units": 5120,
+      "candidate": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.6666666666666666,
+          "p99": 0.5,
+          "mean": 0.9031864420572917,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 1063089,
+          "units": 1063089,
+          "demand_units": 951716,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 111373,
+          "other_units": 0,
+          "evictions": 111373
+        },
+        "evaluation_units_per_output_token": 25.9543212890625,
+        "miss_occurrences": 951716,
+        "unique_miss_demands": 951716,
+        "coalesced_misses": 0,
+        "initial_units": 5120,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 10240,
+          "swaps": 111373,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 172.13
+      },
+      "baseline": {
+        "hit_rate": {
+          "sample_unit": "request_token_layer",
+          "scale": "0_to_1",
+          "count": 1638400,
+          "percentile_method": "linear",
+          "percentile_order": "descending",
+          "p10": 1.0,
+          "p50": 1.0,
+          "p90": 0.6666666666666666,
+          "p99": 0.5,
+          "mean": 0.9013741048177083,
+          "median": 1.0
+        },
+        "evaluation": {
+          "load_count": 1099579,
+          "units": 1099579,
+          "demand_units": 952111,
+          "prefetch_units": 0,
+          "initialization_units": 0,
+          "adaptation_units": 147468,
+          "other_units": 0,
+          "evictions": 147468
+        },
+        "evaluation_units_per_output_token": 26.8451904296875,
+        "miss_occurrences": 969532,
+        "unique_miss_demands": 952111,
+        "coalesced_misses": 17421,
+        "initial_units": 5120,
+        "policy_metadata": {
+          "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+          "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+          "variant": "synchronous_residency_policy",
+          "clock_unit": "decode_step",
+          "tie_break": "layer_id_then_expert_id",
+          "score_dtype": "float32",
+          "params": {
+            "adapt_every": 4,
+            "decay": 0.7,
+            "min_count": 2.0,
+            "min_gain": 1.5,
+            "max_swaps": 96
+          },
+          "adaptations": 2560,
+          "swaps": 147468,
+          "limitations": [
+            "No MTP verification-window trace",
+            "All misses use streamed weight loading; no CPU expert execution",
+            "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+          ]
+        },
+        "elapsed_seconds": 75.59
+      },
+      "hit_rate_delta_pp": 0.1812337239583406,
+      "evaluation_units_delta_percent": -3.318542824117232,
+      "same_config_except_batch": true,
+      "same_initial_state": true,
+      "same_policy_source": true,
+      "baseline_run": "/private/tmp/ExpertCacheBenchmark-capacity-sweep/strata-50pct",
+      "candidate_run": "/private/tmp/ExpertCacheBenchmark-bs1-sweep/strata-50pct"
+    }
+  ]
+}
