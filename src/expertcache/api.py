@@ -1,6 +1,6 @@
 """Stable plugin API. Contexts contain immutable views; no raw trace is public."""
 from dataclasses import dataclass
-from typing import Mapping, Protocol, Literal
+from typing import Iterable, Mapping, Protocol, Literal
 
 ExpertKey = tuple[int, int]
 
@@ -80,6 +80,12 @@ class RouteHistory(Protocol):
     def routes(self, request_id: str, token_index: int, layer_id: int) -> tuple[int, ...]: ...
 
 
+class OracleRoutes(RouteHistory, Protocol):
+    def batches(self) -> Iterable[RouteBatch]:
+        """All batch-layer routes in this phase's actual scheduled order."""
+        ...
+
+
 @dataclass(frozen=True)
 class Context:
     phase: str
@@ -91,7 +97,7 @@ class Context:
     catalog: Mapping[ExpertKey, int]
     cache: CacheView
     history: RouteHistory
-    oracle: RouteHistory | None = None
+    oracle: OracleRoutes | None = None
 
 
 class CachePolicy:

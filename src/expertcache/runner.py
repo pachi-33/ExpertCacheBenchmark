@@ -33,6 +33,31 @@ class VisibleHistory:
         return self.__dataset.routes(request_id, token_index, layer_id)
 
 
+class OracleHistory(VisibleHistory):
+    def __init__(self, dataset, requests, steps):
+        super().__init__(dataset, {}, (r.request_id for r in requests), True)
+        self.__dataset, self.__steps = dataset, steps
+
+    def batches(self):
+        for scheduled in self.__steps():
+            step = scheduled.step
+            for layer in self.__dataset.spec.valid_layers:
+                yield RouteBatch(step, layer, tuple(self.__dataset.routes(row.request_id, row.token_index, layer)
+                                                   for row in step.rows))
+
+
+class PlannedSteps:
+    """Memoize a phase plan only if an oracle or replay actually needs it."""
+    def __init__(self, scheduler, requests, config, start_step):
+        self.scheduler, self.requests, self.config, self.start_step = scheduler, requests, config, start_step
+        self._steps = None
+
+    def get(self):
+        if self._steps is None:
+            self._steps = tuple(self.scheduler.steps(self.requests, self.config, self.start_step))
+        return self._steps
+
+
 def load_config(path):
     path = Path(path).resolve()
     config = RunConfig.model_validate_json(path.read_text())
@@ -65,16 +90,32 @@ class Benchmark:
         self.scheduler = scheduler or DecodeScheduler()
         self.phase, self.step_id, self.layer_id, self.frontier = "initialization", -1, None, {}
         self.active_dataset, self.active_requests = self.dataset, self.requests
+        self.active_scheduler_config = config.scheduler
+        self.phase_start_step = 0
+        self._planned_steps = PlannedSteps(self.scheduler, self.requests, config.scheduler, 0)
         self.writer = None
         self._ran = False
 
     def context(self, hook):
         ids = tuple(r.request_id for r in self.active_requests)
         history = VisibleHistory(self.active_dataset, self.frontier, ids)
-        oracle = VisibleHistory(self.active_dataset, {}, ids, True) if self.config.visibility == "oracle" else None
+        oracle = OracleHistory(self.active_dataset, self.active_requests, self._planned_steps.get) if self.config.visibility == "oracle" else None
         spec = self.dataset.spec
         return Context(self.phase, hook, self.step_id, self.layer_id, spec.model_id, spec.valid_layers,
                        self.engine.catalog, self.engine.view(), history, oracle)
+
+    def _oracle_steps(self):
+        return self._planned_steps.get()
+
+    def _enter_phase(self, dataset, requests, scheduler_config, phase):
+        start = self.step_id + 1
+        if (dataset is not self.active_dataset or requests != self.active_requests or
+                scheduler_config != self.active_scheduler_config or start != self.phase_start_step):
+            self._planned_steps = PlannedSteps(self.scheduler, requests, scheduler_config, start)
+        self.active_dataset, self.active_requests, self.frontier = dataset, requests, {}
+        self.active_scheduler_config = scheduler_config
+        self.phase, self.layer_id = phase, None
+        self.phase_start_step = start
 
     def invoke(self, hook, *args, probe=None):
         plan = getattr(self.policy, hook)(self.context(hook), *args)
@@ -89,10 +130,9 @@ class Benchmark:
         if events: self.policy.on_actions_applied(self.context(hook), tuple(freeze(e) for e in events))
 
     def _replay(self, dataset, requests, scheduler_config, phase, progress=None):
-        self.active_dataset, self.active_requests, self.frontier = dataset, requests, {}
-        self.phase, self.layer_id = phase, None
         lookup = {r.request_id: r for r in requests}
-        for scheduled in self.scheduler.steps(requests, scheduler_config, self.step_id + 1):
+        steps = self._oracle_steps() if self.config.visibility == "oracle" else self.scheduler.steps(requests, scheduler_config, self.step_id + 1)
+        for scheduled in steps:
             step = scheduled.step
             self.step_id = step.step_id
             for r in scheduled.started:
@@ -172,10 +212,10 @@ class Benchmark:
                     self._direct_plan(CachePlan(tuple(Action("load", e.key, reason="initialization") for e in init.experts)), "preload")
             if warmup:
                 warmup_config = self.config.scheduler.model_copy(update={"max_tokens": init.warmup_max_tokens})
+                self._enter_phase(warmup, warmup_requests, warmup_config, "warmup")
                 self._replay(warmup, warmup_requests, warmup_config, "warmup", progress)
             write_json(output / "initial_state.json", self._snapshot())
-            self.phase, self.layer_id, self.frontier = "evaluation", None, {}
-            self.active_dataset, self.active_requests = self.dataset, self.requests
+            self._enter_phase(self.dataset, self.requests, self.config.scheduler, "evaluation")
             self.invoke("on_run_start")
             self._replay(self.dataset, self.requests, self.config.scheduler, "evaluation", progress)
             self.invoke("on_run_end")

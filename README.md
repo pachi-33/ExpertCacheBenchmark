@@ -2,7 +2,7 @@
 
 离线专家缓存 benchmark：按照模型前向的信息公开顺序回放路由，通过固定生命周期的 hooks 执行缓存策略，输出逐 `request / token / layer / top-k` 命中标注，再独立生成 summary。
 
-当前评估目标是**命中率与权重搬运量**。专家大小默认用虚拟单位表示，时序接口已预留；v1 不模拟计算耗时、异步传输或 TPOT。内置 LFU 和 Strata adaptive residency 策略。
+当前评估目标是**命中率与权重搬运量**。专家大小默认用虚拟单位表示，时序接口已预留；v1 不模拟计算耗时、异步传输或 TPOT。内置 LFU、Strata adaptive residency 和 Belady 离线基线。
 
 ## Quick Start
 
@@ -46,6 +46,8 @@ expertcache run configs/strata-smoke.json --output runs/quickstart-strata
 这里每组评估 4 个留出请求 × 32 token。已有 `runs/profile-train20.json` 时可直接复用。完整留出集使用 `configs/lfu-eval.json` 和 `configs/strata-eval.json`，各评估其余 80 个请求 × 512 token。`configs/lfu-full.json` 则对全部 100 个请求做冷启动回放。
 
 当前数据按原始顺序划分，前 20 个请求均来自 math 子集；这是可复现实验划分，不能据此推断所有任务上的算法排名。Strata 的规则、参数及与真实引擎的差别见 [docs/strata.md](docs/strata.md)。
+
+Belady 使用相同 profile，运行 `expertcache run configs/belady-eval.json --output runs/belady-eval`。它在显式 oracle 模式下，用未来路由最小化等大小全局池的去重需求加载；batch 重复访问的加权命中率不保证最优。适用条件与追加原实验的方法见 [docs/belady.md](docs/belady.md)。
 
 ## 一次实验的生命周期
 
@@ -112,7 +114,7 @@ warmup 使用正常的请求、step、layer hooks，保留缓存及策略状态�
 - `catalog`：`(layer_id, expert_id) → size_units` 专家目录。
 - `cache`：驻留与 pin 集合、全局容量、已用量、workspace、各层配额与已用量。
 - `history.routes(request_id, token_index, layer_id)`：本阶段已公开的路由。读取未来信息会抛出 `PermissionError`。
-- `oracle`：仅在配置 `visibility="oracle"` 时提供完整选中请求的路由视图，并在 manifest 标记该模式。
+- `oracle`：仅在配置 `visibility="oracle"` 时提供完整选中请求的路由视图；`oracle.batches()` 按实际调度顺序遍历本阶段所有 batch-layer，并在 manifest 标记该模式。
 
 默认 `visibility="causal"`。普通 Context 不提供原始 trace 或请求未来长度；warmup 与 evaluation 的历史视图分开，跨阶段统计应保存在策略状态中。Python 插件属于受信任代码，因果接口不隔离主动绕过接口的插件。
 
@@ -276,13 +278,13 @@ PYTHONPATH=.:src expertcache postprocess runs/quickstart-lfu --hook my_plugins:A
 
 ### 容量扫描
 
-已有 `runs/profile-train20.json` 后，可执行 LFU/Strata 在 10%、15%、25%、30%、35%、50% 容量下的完整留出集扫描：
+已有 `runs/profile-train20.json` 后，可执行 LFU/Strata/Belady 在 10%、15%、25%、30%、35%、50% 容量下的完整留出集扫描：
 
 ```bash
 PYTHONPATH=src python scripts/capacity_sweep.py --output runs/capacity-sweep-new --workers 4
 PYTHONPATH=src python scripts/verify_capacity_sweep.py runs/capacity-sweep-new/results.json --output runs/capacity-sweep-new/verification.json
 ```
 
-每组有 1,638,400 条标注，12 组共 19,660,800 条，耗时和磁盘占用显著高于 smoke。可用 `--dataset` 和 `--profile` 指向输入的本地副本。建议使用已完整下载的本地磁盘目录；云盘占位文件可能阻塞读写或校验。
+每组有 1,638,400 条标注，三种策略共 18 组、29,491,200 条，耗时和磁盘占用显著高于 smoke。`--policies lfu strata` 可选择策略，`--extend-report` 可保留旧报告并追加其他策略。可用 `--dataset` 和 `--profile` 指向输入的本地副本。建议使用已完整下载的本地磁盘目录；云盘占位文件可能阻塞读写或校验。
 
 已完成实验的汇总与独立核验报告见 [容量扫描结果](docs/results/capacity-sweep-20261018.md)。完整运行输出放在被 Git 忽略的 `runs/` 或指定目录；脚本、配置和精简结果报告纳入版本管理。

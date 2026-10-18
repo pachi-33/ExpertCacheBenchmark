@@ -14,6 +14,9 @@ def make_policy(config):
     elif config.name == "strata":
         from .strata import Strata
         cls = Strata
+    elif config.name == "belady":
+        from .belady import Belady
+        cls = Belady
     else:
         cls = import_symbol(config.name)
     policy = cls(**config.params)

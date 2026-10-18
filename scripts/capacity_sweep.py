@@ -7,11 +7,11 @@ from pathlib import Path
 import time
 
 from expertcache.contracts import DatasetManifest, RunManifest
-from expertcache.data import digest_file, write_json
+from expertcache.data import Dataset, digest_file, write_json
 from expertcache.runner import Benchmark, code_identity, load_config
 
 PERCENTAGES = (10, 15, 25, 30, 35, 50)
-POLICIES = ("lfu", "strata")
+POLICIES = ("lfu", "strata", "belady")
 
 
 def run_one(repo, output, policy, percent, expert_count, dataset_path, profile_path):
@@ -56,6 +56,7 @@ def run_one(repo, output, policy, percent, expert_count, dataset_path, profile_p
                 dataset_fingerprint=manifest.dataset_fingerprint, source_fingerprint=manifest.source_fingerprint,
                 profile_sha256=manifest.inputs["profile_sha256"], manifest_sha256=digest_file(run_dir / "manifest.json"),
                 summary_sha256=digest_file(run_dir / "summary.json"), requests=len(manifest.requests["evaluation"]),
+                visibility=manifest.config.visibility, policy_metadata=manifest.policy_metadata,
                 hit_rate=result["hit_rate"], transfer=result["transfer"])
 
 
@@ -65,7 +66,11 @@ def main():
     parser.add_argument("--dataset", help="optional local dataset manifest copy")
     parser.add_argument("--profile", help="optional local profile copy")
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--policies", nargs="+", choices=POLICIES, default=list(POLICIES))
+    parser.add_argument("--extend-report", help="preserve existing results and append disjoint policies")
     args=parser.parse_args()
+    if args.workers < 1 or len(set(args.policies)) != len(args.policies):
+        parser.error("workers must be positive and policies must be unique")
     repo=Path(__file__).resolve().parents[1]
     output=Path(args.output).resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -74,18 +79,26 @@ def main():
     profile_path=str(Path(args.profile or base.initialization.profile_path).resolve())
     spec=DatasetManifest.model_validate_json(Path(dataset_path).read_text())
     expert_count=len(spec.valid_layers)*spec.num_experts
-    results=[]
+    previous=json.loads(Path(args.extend_report).read_text()) if args.extend_report else {}
+    results=list(previous.get("results", []))
+    if any(r["policy"] in args.policies for r in results):
+        raise ValueError("extended policies overlap the existing report")
+    if results:
+        fingerprint=Dataset(dataset_path).fingerprint
+        profile_sha=digest_file(profile_path)
+        if any(r['dataset_fingerprint']!=fingerprint or r['profile_sha256']!=profile_sha for r in results):
+            raise ValueError("extension inputs differ from the existing report")
     start=time.monotonic()
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
         tasks=[pool.submit(run_one,str(repo),str(output),policy,pct,expert_count,dataset_path,profile_path)
-               for pct in PERCENTAGES for policy in POLICIES]
+               for pct in PERCENTAGES for policy in args.policies]
         for task in as_completed(tasks):
             results.append(task.result())
-            write_json(output/"results.partial.json",dict(completed=len(results),total=len(tasks),results=results))
+            write_json(output/"results.partial.json",dict(completed=len(results),total=len(tasks)+len(previous.get("results",[])),results=results))
     results.sort(key=lambda r:(r["cache_percent"],r["policy"]))
     if len({r["dataset_fingerprint"] for r in results})!=1 or len({r["profile_sha256"] for r in results})!=1:
         raise ValueError("Sweep input fingerprints differ")
-    report=dict(created_at_utc=datetime.now(timezone.utc).isoformat(),
+    report=dict(previous, created_at_utc=datetime.now(timezone.utc).isoformat(),
                 elapsed_seconds=round(time.monotonic()-start,2),
                 experiment=dict(expert_count=expert_count, valid_layers=list(spec.valid_layers),
                                 num_experts_per_layer=spec.num_experts, batch_size=base.scheduler.batch_size,
@@ -93,6 +106,14 @@ def main():
                                 expected_decisions_per_run=80*512*len(spec.valid_layers),
                                 percentile_order="descending",expert_size_units=1,workspace_units=1),
                 results=results)
+    manifests=[RunManifest.model_validate_json((Path(r['run_dir'])/'manifest.json').read_text()) for r in results]
+    report['framework_revisions']=sorted({m.framework_revision for m in manifests if m.framework_revision})
+    report['policy_source_sha256']={r['policy']:m.inputs['policy_implementation']['source_sha256'] for r,m in zip(results,manifests)}
+    report['source_fingerprint_variants']=sorted({r['source_fingerprint'] for r in results})
+    if 'belady' in {r['policy'] for r in results}:
+        report['belady_scope']=dict(visibility='oracle', objective='deduplicated_demand_loads',
+                                   assumptions=['uniform_expert_size','global_pool','demand_only_admission','bypass_allowed','fixed_initial_residency','batch_snapshot'],
+                                   occurrence_weighted_hit_rate_is_strict_upper_bound=False)
     write_json(output/"results.json",report)
     print(json.dumps({"report":str(output/"results.json"),"elapsed_seconds":report["elapsed_seconds"]}),flush=True)
 
