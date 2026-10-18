@@ -4,7 +4,7 @@
 
 当前评估目标是**命中率与权重搬运量**。专家大小默认用虚拟单位表示，时序接口已预留；v1 不模拟计算耗时、异步传输或 TPOT。内置 LFU、Strata adaptive residency 和 Belady 离线基线。
 
-**阅读导航** · [快速开始](#quick-start) · [生命周期](#lifecycle) · [Hooks 导图](#hooks) · [缓存与初始化](#cache) · [Detail → Summary](#outputs) · [实验结果](docs/results/capacity-sweep-20261018.md)
+**阅读导航** · [快速开始](#quick-start) · [生命周期](#lifecycle) · [Hooks 导图](#hooks) · [缓存与初始化](#cache) · [Detail → Summary](#outputs) · [数据集](#datasets) · [实验结果](docs/results/capacity-sweep-20261018.md)
 
 | 输入 | 回放与决策 | 输出 |
 | :--- | :--- | :--- |
@@ -15,14 +15,20 @@
 
 以下命令均在仓库根目录执行，需要 Python 3.11+。
 
-**先准备数据集。** 数据集已从 Git 跟踪中移出，计划单独托管到 Hugging Face，发布后补充下载地址。运行前，请将完整数据集放到 `dataset/router_results_sample100/`，其中应包含 `benchmark.json`、`routes/*.npy` 和配套元数据。已有本地数据可继续使用。
+**先准备数据集。** 配套数据已发布到 [Hugging Face · pachi33/ExpertCacheBenchmark](https://huggingface.co/datasets/pachi33/ExpertCacheBenchmark)，包含 sample100、完整 4,000 条路由及对应 prompt。下面的 Quick Start 只下载 sample100；已有本地数据可继续使用。完整集与格式说明见[数据集](#datasets)。
 
-仓库根目录的 `/dataset/` 已加入 `.gitignore`；示例配置仍使用上述本地路径。仅安装依赖和运行单元测试不需要下载数据集。
+仓库根目录的 `/dataset/` 已加入 `.gitignore`；示例配置默认读取 `dataset/router_results_sample100/benchmark.json`。仅安装依赖和运行单元测试不需要下载数据集。
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
+python -m pip install -U huggingface_hub
+
+# 下载 Quick Start / 已有实验使用的 100 请求子集，保持原目录结构
+hf download pachi33/ExpertCacheBenchmark --repo-type dataset \
+  --revision e57d183b4bf9f0b6bc083c7cf804843b4a7d60a0 \
+  --include "router_results_sample100/**" --local-dir dataset
 
 # 校验 manifest、全部路由数组及数据指纹
 expertcache validate dataset/router_results_sample100/benchmark.json
@@ -402,11 +408,51 @@ PYTHONPATH=.:src expertcache postprocess runs/quickstart-lfu --hook my_plugins:A
 
 `detail.access_chunks(phase)` 适合批量处理；`detail.records(phase)` 逐行返回 Pydantic `AccessRecord`；`detail.events()` 迭代缓存事件。后处理只能基于已有 detail 扩展分析；改变容量、调度或策略需要重新回放。
 
-## 数据格式与命令入口
+<a id="datasets"></a>
+
+## 数据集与命令入口
+
+数据与代码分别维护：[Hugging Face 数据集](https://huggingface.co/datasets/pachi33/ExpertCacheBenchmark)保存路由、prompt、结果和元数据，本仓库保存框架、实验配置及报告。当前已校验发布版本为 [`e57d183b`](https://huggingface.co/datasets/pachi33/ExpertCacheBenchmark/tree/e57d183b4bf9f0b6bc083c7cf804843b4a7d60a0)。
+
+| 数据 | 请求数 | 路由 token 数 | 用途 |
+|---|---:|---:|---|
+| `router_results_sample100/` | 100 | 51,200 | Quick Start，以及已有容量、BS=1/4 对比实验 |
+| `cascade_balanced_4k/router_results_uint8/` | 4,000 | 2,048,000 | 完整集上的缓存策略评估 |
+| `cascade_balanced_4k/final_prompt.jsonl` | 4,000 | — | 与完整路由对应的渲染后模型输入 |
+
+sample100 从完整集中按 seed `20261018` 无放回抽样，100 个路由文件已逐一核对一致，因此两套合计仍为 4,000 个不同请求。完整集包含 math、chat、agent、coding_swe 各 1,000 条；目录名 `4k` 表示请求数。
+
+### 下载完整数据
+
+在本仓库根目录运行，所有文件将放入已被 Git 忽略的 `dataset/`：
+
+```bash
+hf download pachi33/ExpertCacheBenchmark --repo-type dataset \
+  --revision e57d183b4bf9f0b6bc083c7cf804843b4a7d60a0 --local-dir dataset
+
+# 完整集原生 manifest，可直接用于回放
+expertcache validate dataset/cascade_balanced_4k/router_results_uint8/benchmark.json
+
+# 核对整份发布内容；只下载 sample100 时跳过此项
+(cd dataset && shasum -a 256 -c SHA256SUMS)
+```
+
+下载包含已还原的 `final_prompt.jsonl`、`mapping.jsonl`、`results.jsonl`，以及原始上传分片、SHA-256 和来源说明，无需自行拼接。`dataset_manifest.json` 记录文件校验和与数据来源。固定 `--revision` 可以复现同一版本。
+
+现有 `configs/` 示例仍指向 sample100。使用完整集时，将配置中的 `dataset` 改为 `../dataset/cascade_balanced_4k/router_results_uint8/benchmark.json`，并显式设置请求范围、token 上限和初始化方式；仅更换路径会保留原配置的样本上限。使用 profile 初始化时，应针对该数据集重新生成 profile 并明确训练/评估划分。
+
+| 数据集 | 校验后的 benchmark fingerprint |
+|---|---|
+| sample100 | `8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1` |
+| 完整 4K | `6c79ef04b7d879b6e43e99cc09c11296ade7866c6a7cfda5c488720fa7844a3f` |
+
+`final_prompt.jsonl` 保存模型实际使用的渲染后输入；上游原始对话文件 `samples.jsonl` 未包含在这次数据发布中。数据集采集时的 concurrency=4 与 benchmark 回放的 batch size 是独立设置。
+
+### 路由格式
 
 版本化 Pydantic 契约见 [contracts.py](src/expertcache/contracts.py)，已导出的 JSON Schema 在 [docs/schemas](docs/schemas)。输入 route 为无 pickle 的 `.npy`，轴固定为 `[token, layer, topk]`，支持 `uint8 / uint16 / uint32`；route 路径相对于数据集 manifest，层 ID 保留原编号。
 
-当前数据集含 100 个请求，每个 512 token、43 层、top-k=6、每层 256 个专家，专家 ID 已无损转换为 uint8。第 0–2 层是零占位，manifest 明确仅评估第 3–42 层，并记录排除原因；原始 43 层数组保持完整。有效专家全集为 40 × 256 = 10,240 个，默认 1 unit/专家时，1,024 units 对应 10% 常驻容量。
+两套路由数据均为每个请求 512 token、43 层、top-k=6、每层 256 个专家，记录的模型标识为 `DeepSeek-V4-Flash-w8a8-mtp`，专家 ID 已无损转换为 uint8。第 0–2 层是零占位，manifest 明确仅评估第 3–42 层，并记录排除原因；原始 43 层数组保持完整。有效专家全集为 40 × 256 = 10,240 个，默认 1 unit/专家时，1,024 units 对应 10% 常驻容量。
 
 当前 trace 仅包含已输出 token 的路由，没有 prefill、被拒绝的 MTP 草稿、真实专家字节数或耗时，不能重建这些前向或直接测 MTP 加速收益。
 
