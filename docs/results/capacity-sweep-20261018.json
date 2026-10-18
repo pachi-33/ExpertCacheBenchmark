@@ -54,18 +54,97 @@
     "workspace_units": 1
   },
   "framework_revisions": [
+    "6f8e913a1d4321815a2f42bc56dd34dc85ed79a3",
     "9994b753d8e3a51c68e4ec6294515a2e34ff4ec9"
   ],
   "policy_source_sha256": {
+    "belady": "20ba56dd107cb933a723dccd271660853faa01db5e67866df22cd4a21977b6e6",
     "lfu": "d71ed02fae246177cbe617a5b761e872c4f5f1ab455eca8a9dee8fbebbfd292e",
     "strata": "c66f7d491c1279c52a2aa99db97f2a438599bc84fab04aab30039f840e8fec9d"
   },
   "source_fingerprint_variants": [
     "1b490c872d5d894aa385706325e3f3b1a4b1502cae175cd6f2d9b2383b2509f1",
-    "58b53e10198f3f6a7f5843415b1737c22384f2c5c3ddc0069df531b27762d090"
+    "58b53e10198f3f6a7f5843415b1737c22384f2c5c3ddc0069df531b27762d090",
+    "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c"
   ],
   "provenance_note": "Desktop FileProvider dataless placeholders affected source-file fingerprint reads and delayed postprocessing. All runs use the same recorded Git revision and per-policy SHA-256. Raw detail and dataset are local and independently verified; the last two summaries were finalized using an identical fully local source copy.",
   "results": [
+    {
+      "policy": "belady",
+      "cache_percent": 10,
+      "capacity_units": 1024,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-10pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "cdc4aa8c770ab8d8332364a83a74312d1a3f3fc8c3c58a0f7b6358d66655a841",
+      "summary_sha256": "25946d04b7d6eda6f5fc05c4f6105e5566a4b1f9ef26deb6edb5138675aab7d1",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 409600
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.6666666666666666,
+        "p90": 0.3333333333333333,
+        "p99": 0.16666666666666666,
+        "mean": 0.6827702840169272,
+        "median": 0.6666666666666666
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 1024,
+            "units": 1024,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 1024,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 3014275,
+            "units": 3014275,
+            "demand_units": 3014275,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 1536225
+          }
+        },
+        "total_units": 3015299,
+        "evaluation_miss_occurrences": 3118495,
+        "evaluation_unique_miss_demands": 3014275,
+        "evaluation_coalesced_miss_occurrences": 104220
+      }
+    },
     {
       "policy": "lfu",
       "cache_percent": 10,
@@ -192,6 +271,82 @@
         "evaluation_miss_occurrences": 5036487,
         "evaluation_unique_miss_demands": 4841899,
         "evaluation_coalesced_miss_occurrences": 194588
+      }
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 15,
+      "capacity_units": 1536,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-15pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "3580b758a22e75feceecb64867aeb7cfea02168ad3a3825769f02f7442076234",
+      "summary_sha256": "131ce651413f38ffba496180a31810a91a7ee26311401e229018f7867d7a90dc",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 409600
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.8333333333333334,
+        "p90": 0.5,
+        "p99": 0.16666666666666666,
+        "mean": 0.7723959350585937,
+        "median": 0.8333333333333334
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 1536,
+            "units": 1536,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 1536,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 2177182,
+            "units": 2177182,
+            "demand_units": 2177182,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 1277007
+          }
+        },
+        "total_units": 2178718,
+        "evaluation_miss_occurrences": 2237439,
+        "evaluation_unique_miss_demands": 2177182,
+        "evaluation_coalesced_miss_occurrences": 60257
       }
     },
     {
@@ -323,6 +478,82 @@
       }
     },
     {
+      "policy": "belady",
+      "cache_percent": 25,
+      "capacity_units": 2560,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-25pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "c661771ac7ffd7f2dc26804f9159f94cde0bfe14c390f9aad967aad3a2101a1b",
+      "summary_sha256": "0025325ad0bae551b2d76a5a7a0db6d1b975542c7cc510a6dfa90162fcd7b89c",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 409600
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 0.8333333333333334,
+        "p90": 0.6666666666666666,
+        "p99": 0.3333333333333333,
+        "mean": 0.8700275675455729,
+        "median": 0.8333333333333334
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 2560,
+            "units": 2560,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 2560,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 1251830,
+            "units": 1251830,
+            "demand_units": 1251830,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 847930
+          }
+        },
+        "total_units": 1254390,
+        "evaluation_miss_occurrences": 1277681,
+        "evaluation_unique_miss_demands": 1251830,
+        "evaluation_coalesced_miss_occurrences": 25851
+      }
+    },
+    {
       "policy": "lfu",
       "cache_percent": 25,
       "capacity_units": 2560,
@@ -448,6 +679,82 @@
         "evaluation_miss_occurrences": 2776191,
         "evaluation_unique_miss_demands": 2700771,
         "evaluation_coalesced_miss_occurrences": 75420
+      }
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 30,
+      "capacity_units": 3072,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-30pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "0d3564d6a5b5a93760a15af64ba1bf9e5c59e1483f9395ba800580230ee8dc09",
+      "summary_sha256": "2a59be4be506058f034281ae924f3b0c805aa9e0072fc8e78fb72a2bd7f49551",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 409600
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 1.0,
+        "p90": 0.6666666666666666,
+        "p99": 0.5,
+        "mean": 0.9003151448567708,
+        "median": 1.0
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 3072,
+            "units": 3072,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 3072,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 962182,
+            "units": 962182,
+            "demand_units": 962182,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 682454
+          }
+        },
+        "total_units": 965254,
+        "evaluation_miss_occurrences": 979942,
+        "evaluation_unique_miss_demands": 962182,
+        "evaluation_coalesced_miss_occurrences": 17760
       }
     },
     {
@@ -579,6 +886,82 @@
       }
     },
     {
+      "policy": "belady",
+      "cache_percent": 35,
+      "capacity_units": 3584,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-35pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "3487ac0ef68043f42ec9e02438f4a4447892be8059fa625a7f6dd6fa41f942eb",
+      "summary_sha256": "573d87f8c6c9ea679745f06e4a4929f04c3f9ada13b6fdddad8fb45676bb0d04",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 409600
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 1.0,
+        "p90": 0.8333333333333334,
+        "p99": 0.5,
+        "mean": 0.9233446248372397,
+        "median": 1.0
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 3584,
+            "units": 3584,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 3584,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 741082,
+            "units": 741082,
+            "demand_units": 741082,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 545478
+          }
+        },
+        "total_units": 744666,
+        "evaluation_miss_occurrences": 753553,
+        "evaluation_unique_miss_demands": 741082,
+        "evaluation_coalesced_miss_occurrences": 12471
+      }
+    },
+    {
       "policy": "lfu",
       "cache_percent": 35,
       "capacity_units": 3584,
@@ -704,6 +1087,82 @@
         "evaluation_miss_occurrences": 1876829,
         "evaluation_unique_miss_demands": 1833383,
         "evaluation_coalesced_miss_occurrences": 43446
+      }
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 50,
+      "capacity_units": 5120,
+      "run_dir": "/private/tmp/ExpertCacheBenchmark-belady-sweep/belady-50pct",
+      "dataset_fingerprint": "8b794485c95b0ba0c161dae0f848fb144fe405179c54b759ff0ed04ee7b8dcf1",
+      "source_fingerprint": "f48511fbd148176aee86aab8d76271012715ee7051681da9297319e2622b886c",
+      "profile_sha256": "7793bad0a5ad1a4a243ab8ea64c0c2b18748be5db4bc2eb16dc8ee72c2b7c85e",
+      "manifest_sha256": "558609d6e4c430014ad818bc35eead31ffc507ad7b67cdea2796749853c604d6",
+      "summary_sha256": "340a61a1876634e6ee93fa655a2c07104d133951cce25b88523fe7981f4bc1c9",
+      "requests": 80,
+      "visibility": "oracle",
+      "policy_metadata": {
+        "variant": "batched_belady_min_with_bypass",
+        "requires_visibility": "oracle",
+        "objective": "deduplicated_demand_loads",
+        "admission": "demand_only",
+        "allocation": "global",
+        "expert_sizes": "uniform",
+        "batch_hits": "pre_demand_snapshot",
+        "occurrence_weighted_hit_rate_optimal": false,
+        "indexed_batch_layers": 409600
+      },
+      "hit_rate": {
+        "sample_unit": "request_token_layer",
+        "scale": "0_to_1",
+        "count": 1638400,
+        "percentile_method": "linear",
+        "percentile_order": "descending",
+        "p10": 1.0,
+        "p50": 1.0,
+        "p90": 0.8333333333333334,
+        "p99": 0.6666666666666666,
+        "mean": 0.9667051188151042,
+        "median": 1.0
+      },
+      "transfer": {
+        "unit_name": "virtual_expert",
+        "phases": {
+          "initialization": {
+            "load_count": 5120,
+            "units": 5120,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 5120,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "warmup": {
+            "load_count": 0,
+            "units": 0,
+            "demand_units": 0,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 0
+          },
+          "evaluation": {
+            "load_count": 322721,
+            "units": 322721,
+            "demand_units": 322721,
+            "prefetch_units": 0,
+            "initialization_units": 0,
+            "adaptation_units": 0,
+            "other_units": 0,
+            "evictions": 258512
+          }
+        },
+        "total_units": 327841,
+        "evaluation_miss_occurrences": 327302,
+        "evaluation_unique_miss_demands": 322721,
+        "evaluation_coalesced_miss_occurrences": 4581
       }
     },
     {
@@ -834,5 +1293,20 @@
         "evaluation_coalesced_miss_occurrences": 17421
       }
     }
-  ]
+  ],
+  "created_at_utc": "2026-10-18T02:36:37.537747+00:00",
+  "elapsed_seconds": 170.45,
+  "belady_scope": {
+    "visibility": "oracle",
+    "objective": "deduplicated_demand_loads",
+    "assumptions": [
+      "uniform_expert_size",
+      "global_pool",
+      "demand_only_admission",
+      "bypass_allowed",
+      "fixed_initial_residency",
+      "batch_snapshot"
+    ],
+    "occurrence_weighted_hit_rate_is_strict_upper_bound": false
+  }
 }

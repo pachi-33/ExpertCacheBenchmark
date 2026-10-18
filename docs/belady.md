@@ -21,11 +21,13 @@
 expertcache profile dataset/router_results_sample100/benchmark.json --max-requests 20 --output runs/profile-train20.json
 expertcache run configs/belady-eval.json --output runs/belady-eval
 
-# 给原 12 组实验追加 Belady 六档容量，保留原始实验指纹
-PYTHONPATH=src python scripts/capacity_sweep.py --policies belady --extend-report docs/results/capacity-sweep-20261018.json --output runs/belady-sweep --workers 3
+# 先产生两种在线策略的报告；已有这 12 组完整输出时可跳过
+PYTHONPATH=src python scripts/capacity_sweep.py --policies lfu strata --output runs/lfu-strata-sweep --workers 3
+# 给上述报告追加 Belady 六档容量，保留原始实验指纹
+PYTHONPATH=src python scripts/capacity_sweep.py --policies belady --extend-report runs/lfu-strata-sweep/results.json --output runs/belady-sweep --workers 3
 PYTHONPATH=src python scripts/verify_capacity_sweep.py runs/belady-sweep/results.json --output runs/belady-sweep/verification.json
 ```
 
-已有 profile 时直接复用。`--extend-report` 要求相同数据和 profile 指纹，并拒绝覆盖已有策略；原有结果保持原样。新增策略代码可以有不同 Git revision，核验要求同一策略的六档实验使用同一 revision 和源码 SHA-256。完整运行和封存 detail 均由普通 Benchmark 生命周期生成。
+已有 profile 时直接复用。`--extend-report` 要求相同数据和 profile 指纹，且旧报告的 `run_dir` 仍可读取；它拒绝覆盖已有策略。仓库中已合并的报告包含 Belady，请勿再次追加同名策略。新增策略代码可以有不同 Git revision，核验要求同一策略的六档实验使用同一 revision 和源码 SHA-256。完整运行和封存 detail 均由普通 Benchmark 生命周期生成。
 
 oracle 提供当前阶段完整的实际调度序列，包括打乱、请求偏移、token 限制和 continuous batching；oracle 回放复用同一份调度计划，避免二次调用有状态调度器改变顺序。warmup 与 evaluation 分开建索引，restore 根据新阶段的路由重新建立未来索引。

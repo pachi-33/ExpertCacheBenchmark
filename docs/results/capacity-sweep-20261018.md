@@ -1,46 +1,76 @@
 # 缓存容量扫描：完整留出集
 
 比例按 40 个有效层 × 256 专家 = 10,240 个专家计算；每专家 1 unit，另有 1 unit workspace。
-相同的前 20 请求 profile 初始化，评估其余 80 请求 × 512 token，batch=4。每组 1,638,400 次判断，12 组共 19,660,800 次。
-所有判断逐项核对原始路由与覆盖范围，均值及降序分位数从 hit_count 直方图独立重算。
+相同的前 20 请求 profile 初始化，评估其余 80 请求 × 512 token，batch=4。每组 1,638,400 次判断，18 组共 29,491,200 次。
+原 LFU / Strata 的 12 组结果与原始指纹保持不变，追加 Belady 六组。全部判断核对原始路由、顺序和覆盖范围，均值及降序分位数从 hit_count 直方图独立重算。
 
-| 缓存比例 | 专家数 | LFU 平均命中率 | Strata 平均命中率 |
-|---|---:|---:|---:|
-| 10% | 1024 | 20.85% | 48.77% |
-| 15% | 1536 | 27.50% | 58.39% |
-| 25% | 2560 | 39.44% | 71.76% |
-| 30% | 3072 | 45.32% | 76.72% |
-| 35% | 3584 | 50.82% | 80.91% |
-| 50% | 5120 | 65.99% | 90.14% |
+| 缓存比例 | 专家数 | LFU 平均命中率 | Strata 平均命中率 | Belady（oracle）平均命中率 |
+|---|---:|---:|---:|---:|
+| 10% | 1024 | 20.85% | 48.77% | 68.28% |
+| 15% | 1536 | 27.50% | 58.39% | 77.24% |
+| 25% | 2560 | 39.44% | 71.76% | 87.00% |
+| 30% | 3072 | 45.32% | 76.72% | 90.03% |
+| 35% | 3584 | 50.82% | 80.91% | 92.33% |
+| 50% | 5120 | 65.99% | 90.14% | 96.67% |
+
+Belady 是全局、等大小、固定初始驻留、按需准入且允许 bypass 的离线 MIN 基线，优化去重专家加载次数。表中命中率按原有逐 request/token/layer 口径统计；batch 内重复次数不同，因此该命中率不是严格的加权命中率上界。具体规则与适用条件见 [Belady 说明](../belady.md)。
+
+## Evaluation 权重搬运量
+
+单位为虚拟专家 units；包含全部 demand、prefetch、adaptation 加载。初始化单列，每种策略均为对应容量的专家数；warmup 为 0。Belady 的 evaluation 去重需求加载在上述模型下是搬运下界，无额外预取和适应性换入。
+
+| 缓存比例 | LFU evaluation units | Strata evaluation units | Belady evaluation units | Strata 相对 Belady 的额外搬运 |
+|---|---:|---:|---:|---:|
+| 10% | 7,102,041 | 5,062,875 | 3,014,275 | +67.96% |
+| 15% | 6,518,981 | 4,192,990 | 2,177,182 | +92.59% |
+| 25% | 5,457,788 | 2,941,788 | 1,251,830 | +135.00% |
+| 30% | 4,930,196 | 2,467,924 | 962,182 | +156.49% |
+| 35% | 4,435,444 | 2,060,507 | 741,082 | +178.04% |
+| 50% | 3,061,203 | 1,099,579 | 322,721 | +240.72% |
 
 ## 降序分位数
 
-P10/P50/P90/P99 按命中率从高到低排序，使用 linear 插值；P50 与中位数一致。
+P10/P50/P90/P99 按命中率从高到低排序，使用 linear 插值；P50 与中位数一致。所有策略均使用相同 batch-layer 快照；本层加载不反过来增加当前命中。
 
 | 缓存比例 | 策略 | 平均 | P10 | P50 | P90 | P99 | 中位数 |
 |---|---|---:|---:|---:|---:|---:|---:|
 | 10% | lfu | 20.85% | 50.00% | 16.67% | 0.00% | 0.00% | 16.67% |
 | 10% | strata | 48.77% | 83.33% | 50.00% | 16.67% | 0.00% | 50.00% |
+| 10% | belady | 68.28% | 100.00% | 66.67% | 33.33% | 16.67% | 66.67% |
 | 15% | lfu | 27.50% | 50.00% | 16.67% | 0.00% | 0.00% | 16.67% |
 | 15% | strata | 58.39% | 83.33% | 66.67% | 33.33% | 0.00% | 66.67% |
+| 15% | belady | 77.24% | 100.00% | 83.33% | 50.00% | 16.67% | 83.33% |
 | 25% | lfu | 39.44% | 66.67% | 33.33% | 16.67% | 0.00% | 33.33% |
 | 25% | strata | 71.76% | 100.00% | 66.67% | 50.00% | 16.67% | 66.67% |
+| 25% | belady | 87.00% | 100.00% | 83.33% | 66.67% | 33.33% | 83.33% |
 | 30% | lfu | 45.32% | 83.33% | 50.00% | 16.67% | 0.00% | 50.00% |
 | 30% | strata | 76.72% | 100.00% | 83.33% | 50.00% | 16.67% | 83.33% |
+| 30% | belady | 90.03% | 100.00% | 100.00% | 66.67% | 50.00% | 100.00% |
 | 35% | lfu | 50.82% | 83.33% | 50.00% | 16.67% | 0.00% | 50.00% |
 | 35% | strata | 80.91% | 100.00% | 83.33% | 50.00% | 33.33% | 83.33% |
+| 35% | belady | 92.33% | 100.00% | 100.00% | 83.33% | 50.00% | 100.00% |
 | 50% | lfu | 65.99% | 100.00% | 66.67% | 33.33% | 16.67% | 66.67% |
 | 50% | strata | 90.14% | 100.00% | 100.00% | 66.67% | 50.00% | 100.00% |
+| 50% | belady | 96.67% | 100.00% | 100.00% | 83.33% | 66.67% | 100.00% |
 
-## 复现与原始输出
+## 核验与来源
 
-输入数据和 profile 的本地副本均已校验指纹一致。完整输出位于 `/private/tmp/ExpertCacheBenchmark-capacity-sweep`，各组包含 manifest、状态、detail 与 summary。
-`capacity-sweep-20261018.json` 保存全部 summary 与运行指纹；`capacity-sweep-20261018-verification.json` 保存 12 组独立核验结果。
-脚本：`scripts/capacity_sweep.py`；校验：`scripts/verify_capacity_sweep.py`。
-本机 Desktop 的 FileProvider 将文件标记为 dataless，导致首次输出及部分源码指纹读取异常。有效 detail 已改存在本地临时目录；最后两组使用相同代码的本地副本完成标准后处理，全部 manifest 状态为 complete。
-报告保留原始源码指纹差异，并核对所有实验的 Git revision 与各策略源码 SHA-256 一致；没有重写历史指纹。
+- 全部 18 组均核对 80 × 512 × 40 的完整覆盖、记录顺序、专家 ID、命中掩码计数、summary 校验和与降序分位数，并验证相同 profile 初始驻留。
+- 新增 Belady 六组共 9,830,400 条标注；从缓存事件重建全部 2,457,600 个 batch-layer 的命中快照，以独立反向索引检查每步保留/排除集合的下一次使用边界，并逐项验证去重需求只搬运一次。
+- 同一策略的六档实验使用同一 Git revision 和策略源码 SHA-256；新增 Belady 与历史策略的代码版本分别记录，原有历史指纹不重写。
+- 38 项测试通过，包含小规模全状态动态规划对照、bypass、batch 去重、因果隔离、调度一致性、warmup/restore 和核验器篡改检测。
+
+`capacity-sweep-20261018.json` 保存全部 summary、作用范围与运行指纹；`capacity-sweep-20261018-verification.json` 保存 18 组独立核验结果。
+
+原 LFU / Strata 完整输出位于 `/private/tmp/ExpertCacheBenchmark-capacity-sweep`，新增 Belady 输出位于 `/private/tmp/ExpertCacheBenchmark-belady-sweep`，各组包含 manifest、状态、detail 与 summary。临时目录不作为长期存档；精简报告与复现脚本已纳入 Git。
+
+历史实验的本机 Desktop FileProvider 占位文件曾影响部分源码指纹读取。原报告保留这一来源说明和指纹差异；最后两组历史 summary 使用相同代码的本地副本完成标准后处理。新增 Belady 直接使用已提交代码和指纹一致的本地数据副本。
+
+## 复现
+
+已有 `runs/profile-train20.json` 后，使用新的输出目录完整重跑三种策略，或先取得仅含 LFU / Strata 的旧报告并用 `--policies belady --extend-report OLD_REPORT` 追加。当前报告已含 Belady，不可再次追加同名策略。
 
 ```bash
-PYTHONPATH=src python scripts/capacity_sweep.py --output /private/tmp/ExpertCacheBenchmark-capacity-sweep
-PYTHONPATH=src python scripts/verify_capacity_sweep.py /private/tmp/ExpertCacheBenchmark-capacity-sweep/results.json --output /private/tmp/ExpertCacheBenchmark-capacity-sweep/verification.json
+PYTHONPATH=src python scripts/capacity_sweep.py --output runs/capacity-sweep-new --workers 3
+PYTHONPATH=src python scripts/verify_capacity_sweep.py runs/capacity-sweep-new/results.json --output runs/capacity-sweep-new/verification.json
 ```

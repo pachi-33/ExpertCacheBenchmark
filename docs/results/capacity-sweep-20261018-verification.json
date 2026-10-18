@@ -1,18 +1,29 @@
 {
-  "verified_runs": 12,
-  "verified_decisions": 19660800,
-  "framework_revisions": [
-    "9994b753d8e3a51c68e4ec6294515a2e34ff4ec9"
-  ],
-  "policy_source_sha256": {
-    "lfu": "d71ed02fae246177cbe617a5b761e872c4f5f1ab455eca8a9dee8fbebbfd292e",
-    "strata": "c66f7d491c1279c52a2aa99db97f2a438599bc84fab04aab30039f840e8fec9d"
-  },
-  "source_fingerprint_variants": [
-    "1b490c872d5d894aa385706325e3f3b1a4b1502cae175cd6f2d9b2383b2509f1",
-    "58b53e10198f3f6a7f5843415b1737c22384f2c5c3ddc0069df531b27762d090"
-  ],
+  "verified_runs": 18,
+  "verified_decisions": 29491200,
   "checks": [
+    {
+      "policy": "belady",
+      "cache_percent": 10,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        10059,
+        49192,
+        146213,
+        301688,
+        440895,
+        440475,
+        249878
+      ],
+      "mean_independently_recomputed": 0.6827702840169271,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 409600,
+      "belady_greedy_boundaries_verified": 409600,
+      "belady_deduplicated_loads_verified": 3014275
+    },
     {
       "policy": "lfu",
       "cache_percent": 10,
@@ -50,6 +61,28 @@
       "coverage_complete": true,
       "descending_percentiles_verified": true,
       "initialization_verified": true
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 15,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        2953,
+        17153,
+        66196,
+        188169,
+        384094,
+        536477,
+        443358
+      ],
+      "mean_independently_recomputed": 0.7723959350585937,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 409600,
+      "belady_greedy_boundaries_verified": 409600,
+      "belady_deduplicated_loads_verified": 2177182
     },
     {
       "policy": "lfu",
@@ -90,6 +123,28 @@
       "initialization_verified": true
     },
     {
+      "policy": "belady",
+      "cache_percent": 25,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        503,
+        3178,
+        16065,
+        68158,
+        226053,
+        537933,
+        786510
+      ],
+      "mean_independently_recomputed": 0.8700275675455729,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 409600,
+      "belady_greedy_boundaries_verified": 409600,
+      "belady_deduplicated_loads_verified": 1251830
+    },
+    {
       "policy": "lfu",
       "cache_percent": 25,
       "annotated_decisions": 1638400,
@@ -126,6 +181,28 @@
       "coverage_complete": true,
       "descending_percentiles_verified": true,
       "initialization_verified": true
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 30,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        222,
+        1582,
+        7969,
+        40210,
+        163639,
+        490916,
+        933862
+      ],
+      "mean_independently_recomputed": 0.9003151448567709,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 409600,
+      "belady_greedy_boundaries_verified": 409600,
+      "belady_deduplicated_loads_verified": 962182
     },
     {
       "policy": "lfu",
@@ -166,6 +243,28 @@
       "initialization_verified": true
     },
     {
+      "policy": "belady",
+      "cache_percent": 35,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        126,
+        849,
+        4271,
+        23365,
+        115303,
+        430767,
+        1063719
+      ],
+      "mean_independently_recomputed": 0.9233446248372396,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 409600,
+      "belady_greedy_boundaries_verified": 409600,
+      "belady_deduplicated_loads_verified": 741082
+    },
+    {
       "policy": "lfu",
       "cache_percent": 35,
       "annotated_decisions": 1638400,
@@ -202,6 +301,28 @@
       "coverage_complete": true,
       "descending_percentiles_verified": true,
       "initialization_verified": true
+    },
+    {
+      "policy": "belady",
+      "cache_percent": 50,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        21,
+        145,
+        642,
+        4144,
+        33605,
+        244241,
+        1355602
+      ],
+      "mean_independently_recomputed": 0.9667051188151041,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true,
+      "belady_snapshots_verified": 409600,
+      "belady_greedy_boundaries_verified": 409600,
+      "belady_deduplicated_loads_verified": 322721
     },
     {
       "policy": "lfu",

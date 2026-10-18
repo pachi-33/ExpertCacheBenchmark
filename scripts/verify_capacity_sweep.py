@@ -84,6 +84,10 @@ def check_run(entry):
     manifest=RunManifest.model_validate_json((run/'manifest.json').read_text())
     summary=json.loads((run/'summary.json').read_text())
     assert manifest.status=='complete'
+    assert manifest.dataset_fingerprint==entry['dataset_fingerprint']
+    assert manifest.source_fingerprint==entry['source_fingerprint']
+    assert manifest.inputs['profile_sha256']==entry['profile_sha256']
+    assert digest_file(manifest.config.initialization.profile_path)==entry['profile_sha256']
     assert digest_file(run/'manifest.json')==entry['manifest_sha256']
     assert digest_file(run/'summary.json')==entry['summary_sha256']
     assert manifest.config.cache.capacity_units==entry['capacity_units']
