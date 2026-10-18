@@ -1,0 +1,245 @@
+{
+  "verified_runs": 12,
+  "verified_decisions": 19660800,
+  "framework_revisions": [
+    "9994b753d8e3a51c68e4ec6294515a2e34ff4ec9"
+  ],
+  "policy_source_sha256": {
+    "lfu": "d71ed02fae246177cbe617a5b761e872c4f5f1ab455eca8a9dee8fbebbfd292e",
+    "strata": "c66f7d491c1279c52a2aa99db97f2a438599bc84fab04aab30039f840e8fec9d"
+  },
+  "source_fingerprint_variants": [
+    "1b490c872d5d894aa385706325e3f3b1a4b1502cae175cd6f2d9b2383b2509f1",
+    "58b53e10198f3f6a7f5843415b1737c22384f2c5c3ddc0069df531b27762d090"
+  ],
+  "checks": [
+    {
+      "policy": "lfu",
+      "cache_percent": 10,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        516818,
+        535515,
+        340279,
+        168117,
+        60854,
+        15144,
+        1673
+      ],
+      "mean_independently_recomputed": 0.20849589029947915,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 10,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        67569,
+        216083,
+        371115,
+        414348,
+        321702,
+        179750,
+        67833
+      ],
+      "mean_independently_recomputed": 0.4876620483398437,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "lfu",
+      "cache_percent": 15,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        354064,
+        484624,
+        393454,
+        244301,
+        117493,
+        38258,
+        6206
+      ],
+      "mean_independently_recomputed": 0.2749565633138021,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 15,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        29297,
+        117969,
+        264149,
+        390055,
+        402767,
+        292537,
+        141626
+      ],
+      "mean_independently_recomputed": 0.583896993001302,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "lfu",
+      "cache_percent": 25,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        152718,
+        345518,
+        416847,
+        356302,
+        232795,
+        107442,
+        26778
+      ],
+      "mean_independently_recomputed": 0.39440673828125,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 25,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        6808,
+        36517,
+        118163,
+        262614,
+        414287,
+        463690,
+        336321
+      ],
+      "mean_independently_recomputed": 0.7175912475585937,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "lfu",
+      "cache_percent": 30,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        92679,
+        267834,
+        391671,
+        390360,
+        292761,
+        156309,
+        46786
+      ],
+      "mean_independently_recomputed": 0.4532431030273438,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 30,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        3565,
+        20698,
+        76726,
+        198785,
+        374965,
+        510700,
+        452961
+      ],
+      "mean_independently_recomputed": 0.7671743774414063,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "lfu",
+      "cache_percent": 35,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        58318,
+        198956,
+        345493,
+        402061,
+        345139,
+        211563,
+        76870
+      ],
+      "mean_independently_recomputed": 0.5081905110677083,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 35,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        1813,
+        11645,
+        47731,
+        144658,
+        324971,
+        532886,
+        574696
+      ],
+      "mean_independently_recomputed": 0.8090790812174479,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "lfu",
+      "cache_percent": 50,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        12574,
+        65396,
+        175878,
+        325036,
+        430129,
+        401754,
+        227633
+      ],
+      "mean_independently_recomputed": 0.6599267578125,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    },
+    {
+      "policy": "strata",
+      "cache_percent": 50,
+      "annotated_decisions": 1638400,
+      "hit_count_histogram": [
+        205,
+        1665,
+        9350,
+        42366,
+        160814,
+        473851,
+        950149
+      ],
+      "mean_independently_recomputed": 0.9013741048177083,
+      "all_routes_match": true,
+      "coverage_complete": true,
+      "descending_percentiles_verified": true,
+      "initialization_verified": true
+    }
+  ]
+}
