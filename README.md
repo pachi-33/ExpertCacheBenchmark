@@ -4,6 +4,13 @@
 
 当前评估目标是**命中率与权重搬运量**。专家大小默认用虚拟单位表示，时序接口已预留；v1 不模拟计算耗时、异步传输或 TPOT。内置 LFU、Strata adaptive residency 和 Belady 离线基线。
 
+**阅读导航** · [快速开始](#quick-start) · [生命周期](#lifecycle) · [Hooks 导图](#hooks) · [缓存与初始化](#cache) · [Detail → Summary](#outputs) · [实验结果](docs/results/capacity-sweep-20261018.md)
+
+| 输入 | 回放与决策 | 输出 |
+| :--- | :--- | :--- |
+| 路由轨迹 + 实验配置 | 固定生命周期 + 可替换策略 hooks | 逐层 **detail** + 可扩展 **summary** |
+| Pydantic 契约 · 数据指纹 | 因果可见性 · 统一容量与搬运计费 | 命中标注 · 缓存事件 · 独立后处理 |
+
 ## Quick Start
 
 以下命令均在仓库根目录执行，需要 Python 3.11+。
@@ -49,49 +56,144 @@ expertcache run configs/strata-smoke.json --output runs/quickstart-strata
 
 Belady 使用相同 profile，运行 `expertcache run configs/belady-eval.json --output runs/belady-eval`。它在显式 oracle 模式下，用未来路由最小化等大小全局池的去重需求加载；batch 重复访问的加权命中率不保证最优。适用条件与追加原实验的方法见 [docs/belady.md](docs/belady.md)。
 
+<a id="lifecycle"></a>
+
 ## 一次实验的生命周期
 
-`Benchmark` 负责固定流程，策略只在 hooks 中观察信息并提出动作；`CacheEngine` 统一执行动作、检查容量、维护真实驻留状态和记录事件。
+`Benchmark` 推进固定流程，`CachePolicy` 在 hooks 中提出动作，`CacheEngine` 执行动作并维护真实驻留状态。**一次 run 内所有请求共享缓存，每次新 run 创建独立缓存。**
 
-```text
-校验数据与配置，选择评估请求
-创建空缓存池、策略与调度器
-创建 manifest（running）与 detail writer
-│
-├─ 初始化：on_initialize → 执行策略计划 → 显式 preload（若配置）
-│           或 restore 缓存与策略状态（跳过 on_initialize）
-├─ warmup（若配置）：执行下面的 request / step / layer hooks
-├─ 保存 initial_state.json
-│
-├─ 正式评估：重置本阶段的可见路由历史
-│  on_run_start
-│  每个 decode step：
-│    新进入的请求：on_request_start
-│    on_step_start
-│    按顺序遍历有效层：
-│      on_layer_start
-│      公开整个 batch 当前层的 routes
-│      用当前缓存快照生成 probe，固定本次命中判断
-│      on_routes_ready → 执行计划 → 自动补齐未服务的 demand
-│      on_layer_end → 执行计划 → 写入逐层标注
-│    on_step_end
-│    本步完成的请求：on_request_end
-│  on_run_end
-│
-├─ 保存 final_state.json
-├─ 封存 detail 与校验和（detail_complete）
-└─ 执行 summary hooks → 写入 summary.json（complete）
+### 全局视图 · 从初始化到可重算的结果
+
+图中统一使用：**蓝色 = 框架流程**，**紫色 = 策略扩展点**，**琥珀色 = 命中判定快照**，**绿色 = 数据产物**。实线表示执行顺序，虚线表示局部放大或数据反馈。
+
+```mermaid
+flowchart LR
+    subgraph setup [01 · 准备与初始化]
+        direction TB
+        prepare("校验数据 · 创建运行组件<br/>manifest: running")
+        initialize("on_initialize → 执行计划<br/>或 restore 状态")
+        warmup("可选 warmup<br/>保留缓存与策略状态")
+        prepare --> initialize --> warmup
+    end
+
+    subgraph evaluate [02 · 正式评估]
+        direction TB
+        snapshot["保存 initial_state.json"]
+        replay("重置可见历史<br/>on_run_start<br/>逐 step / layer 回放<br/>on_run_end")
+        finalState["保存 final_state.json"]
+        snapshot --> replay --> finalState
+    end
+
+    subgraph finish [03 · 封存与汇总]
+        direction TB
+        seal["封存 detail · 校验和<br/>status: detail_complete"]
+        post("Summary hooks<br/>内置统计 + 自定义分析")
+        result["写入 summary.json<br/>status: complete"]
+        seal --> post --> result
+    end
+
+    setup --> evaluate --> finish
+
+    classDef flow fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a,stroke-width:1.5px;
+    classDef hook fill:#f5f3ff,stroke:#8b5cf6,color:#4c1d95,stroke-width:1.5px;
+    classDef data fill:#ecfdf5,stroke:#10b981,color:#064e3b,stroke-width:1.5px;
+    class prepare,warmup,replay flow;
+    class initialize,post hook;
+    class snapshot,finalState,seal,result data;
+    style setup fill:#f8fafc,stroke:#cbd5e1;
+    style evaluate fill:#f8fafc,stroke:#cbd5e1;
+    style finish fill:#f8fafc,stroke:#cbd5e1;
 ```
 
-每个决策 hook 返回 `CachePlan`，Engine 执行完该计划后才进入下一阶段。产生事件时，Engine 再调用只读反馈 `on_actions_applied`。因此后续 hook 看到的是动作执行后的缓存状态。
+- **初始化分支**：`restore` 跳过 `on_initialize`；其余模式先执行初始化 hook，`preload` 再执行显式加载。独立 profile 通过初始化 hook 交给策略。
+- **预热边界**：warmup 不额外触发 `on_run_start/on_run_end`。`initial_state.json` 保存于 warmup 之后、正式 `on_run_start` 之前；正式起始 hook 的加载计入 evaluation 搬运。
+- **失败恢复**：回放失败标记 `failed`，未封存 detail 不能汇总；后处理失败保留 `detail_complete`，修复插件后可直接 `postprocess`。每个 `Benchmark` 实例只能运行一次。
 
-warmup 使用正常的请求、step、layer hooks，保留缓存及策略状态，但不会额外触发一对 `on_run_start/on_run_end`。`initial_state.json` 是 warmup 之后、正式 `on_run_start` 之前的状态；正式评估的起始 hook 若产生加载，计入 evaluation 搬运。
+### 放大一个前向 · Step → Layer → Top-k 标注
 
-回放失败时状态为 `failed`，detail 标记未封存，不能生成有效 summary。后处理失败时保持 `detail_complete`，修复 summary 插件后执行 `postprocess` 即可。每个 `Benchmark` 实例只能运行一次；每个新实例创建独立缓存，同一次运行内所有请求共享缓存。
+每个 decode step 中，每个活跃请求贡献一个 token；按模型层序公开**整个 batch 当前层**的路由。紫色决策 hook 返回的计划都会在进入下一阶段前执行。
+
+```mermaid
+flowchart LR
+    subgraph steps [正式评估 · Step 循环]
+        direction TB
+        runStart("on_run_start")
+        stepStart("新请求: on_request_start<br/>然后 on_step_start")
+        layers["按模型层序<br/>逐层回放当前 batch"]
+        stepEnd("先 on_step_end<br/>完成请求: on_request_end")
+        runEnd("on_run_end")
+        runStart --> stepStart --> layers --> stepEnd
+        stepEnd -->|下一步| stepStart
+        stepEnd -->|全部完成| runEnd
+    end
+
+    subgraph layer [放大一层 · Layer 循环]
+        direction TB
+        layerStart("on_layer_start<br/>可见此前已公开的路由")
+        reveal["公开 routes<br/>当前 batch-layer 的 top-k"]
+        probe["固定 probe 命中快照<br/>整个 batch 共用同一状态"]
+        ready("on_routes_ready<br/>观察 routes + probe")
+        resolve["执行计划<br/>补齐未服务的去重 demand"]
+        layerEnd("on_layer_end<br/>观察结果 · 执行后续调整")
+        access["写入逐层 hit_count<br/>始终使用原始 probe"]
+        layerStart --> reveal --> probe --> ready --> resolve --> layerEnd --> access
+        access -->|下一层| layerStart
+    end
+
+    steps -.->|展开逐层回放| layer
+
+    classDef flow fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a,stroke-width:1.5px;
+    classDef hook fill:#f5f3ff,stroke:#8b5cf6,color:#4c1d95,stroke-width:1.5px;
+    classDef data fill:#ecfdf5,stroke:#10b981,color:#064e3b,stroke-width:1.5px;
+    classDef snapshot fill:#fffbeb,stroke:#f59e0b,color:#78350f,stroke-width:2px;
+    class layers,reveal,resolve flow;
+    class runStart,stepStart,stepEnd,runEnd,layerStart,ready,layerEnd hook;
+    class probe snapshot;
+    class access data;
+    style steps fill:#f8fafc,stroke:#cbd5e1;
+    style layer fill:#fafbff,stroke:#cbd5e1;
+```
+
+左侧管理 step，右侧展开逐层回放；最后一层写完标注后，回到左侧的 step 收尾。
+
+> **命中判断先于需求加载。** 本层换入的专家不会把已经判定的 miss 改成 hit；3 个请求同时缺同一个专家，会留下 3 次 miss 标注，但只需要 1 次 demand 加载。
+
+<a id="hooks"></a>
 
 ## Hooks 与可见信息
 
-接口定义见 [api.py](src/expertcache/api.py)，固定调用流程见 [runner.py](src/expertcache/runner.py)。以下决策 hook 默认返回空计划，可以按需覆盖。
+### 一次 hook 调用 · 观察 → 决策 → 执行 → 反馈
+
+策略拿到只读 `Context`，返回 `CachePlan`；框架将计划交给 Engine 顺序执行。**策略决定缓存什么，Engine 负责容量检查、真实状态与搬运记录。**
+
+```mermaid
+flowchart TB
+    context["只读 Context<br/>位置 · 目录 · 缓存 · 历史"]
+    policy("CachePolicy<br/>当前决策 hook")
+    engine["CacheEngine<br/>执行动作 · 检查容量<br/>更新驻留 · 记录搬运"]
+    feedback("on_actions_applied<br/>只读反馈，不返回计划")
+    events["detail 缓存事件<br/>加载 · 淘汰 · pin · 配额"]
+
+    context -->|观察| policy
+    policy -->|返回 CachePlan| engine
+    engine -.->|后续 hook 的新视图| context
+    engine -.->|有事件时回调| feedback
+    engine -.->|记录| events
+
+    classDef flow fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a,stroke-width:1.5px;
+    classDef hook fill:#f5f3ff,stroke:#8b5cf6,color:#4c1d95,stroke-width:1.5px;
+    classDef data fill:#ecfdf5,stroke:#10b981,color:#064e3b,stroke-width:1.5px;
+    class context,engine flow;
+    class policy,feedback hook;
+    class events data;
+```
+
+普通模式只公开已发生的路由；`visibility="oracle"` 才额外开放未来轨迹供 Belady 等离线基线使用。接口定义见 [api.py](src/expertcache/api.py)，固定调用流程见 [runner.py](src/expertcache/runner.py)。
+
+<details>
+<summary><strong>展开完整 hook 速查：调用时机、可见信息与常见用途</strong></summary>
+
+以下决策 hook 默认返回空计划，可以按需覆盖。
 
 | Hook | 此时可以看到什么 | 常见用途 |
 |---|---|---|
@@ -105,6 +207,8 @@ warmup 使用正常的请求、step、layer hooks，保留缓存及策略状态�
 | `on_step_end(ctx, step)` | 当前 step 各层都已公开 | 周期衰减、跨层适应、下一步预取 |
 | `on_request_end(ctx, request)` | 本步结束的请求 | 释放请求级状态 |
 | `on_run_end(ctx)` | 最终评估状态 | 收尾动作 |
+
+</details>
 
 `on_actions_applied(ctx, events)` 只观察执行结果，不返回计划。`state_dict()/load_state_dict()` 用于保存、恢复策略的 JSON 可序列化状态；`metadata()` 将算法参数和说明写入运行 manifest。
 
@@ -163,6 +267,8 @@ class RouteCounter(CachePolicy):
 
 将配置中的 `policy` 改成 `{"name": "my_plugins:RouteCounter"}`，运行时添加 `PYTHONPATH=.:src`。这个示例只统计访问，空计划的缺失需求由 Engine 临时加载；实现缓存替换时，在 hook 中返回相应的 `load/evict` 计划。
 
+<a id="cache"></a>
+
 ## 缓存池、初始化与调度
 
 `RunConfig` 使用 Pydantic 校验，拒绝未知字段。最小配置如下；数据集、profile、warmup 和 snapshot 路径相对于配置文件所在目录解析，CLI 输出路径相对于当前工作目录解析。
@@ -211,7 +317,41 @@ Strata 保持初始化后的层内槽位数，正容量实验应使用 profile�
 
 v1 加载立即完成，记录逻辑 tick、transfer ID，`simulated_time=null`。`TransferBackend` 预留了时序后端协议；要模拟异步重叠仍需增加虚拟时钟、完成队列和调度语义。
 
+<a id="outputs"></a>
+
 ## Detail 与 summary
+
+**Detail 保存回放事实，summary 负责解释这些事实。** 后处理读取封存后的 detail，不依赖原始路由数据集；新增统计 hook 后可以直接重算。
+
+```mermaid
+flowchart LR
+    subgraph detail [运行产物 · Detail 与元数据]
+        access["逐层 access<br/>专家 ID · hit_mask · hit_count"]
+        events["缓存 events<br/>动作上下文 · transfer · units"]
+        manifest["manifest<br/>配置 · 请求映射 · 数据契约"]
+    end
+
+    reader["DetailReader<br/>统一读取已封存事实"]
+    builtin("内置 summary hooks<br/>hit_rate · transfer")
+    custom("自定义 summary hooks<br/>process → 独立 namespace")
+    summary["summary.json<br/>内置汇总 + 扩展指标"]
+
+    access --> reader
+    events --> reader
+    manifest --> reader
+    reader --> builtin --> summary
+    reader --> custom --> summary
+
+    classDef flow fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a,stroke-width:1.5px;
+    classDef hook fill:#f5f3ff,stroke:#8b5cf6,color:#4c1d95,stroke-width:1.5px;
+    classDef data fill:#ecfdf5,stroke:#10b981,color:#064e3b,stroke-width:1.5px;
+    class reader flow;
+    class builtin,custom hook;
+    class access,events,manifest,summary data;
+    style detail fill:#f7fdf9,stroke:#a7d9bd,stroke-width:1px;
+```
+
+`expertcache postprocess RUN_DIR` 可以重复执行上图的后处理流程。改变策略、缓存容量或调度方式则需要重新回放。
 
 ```text
 run/
