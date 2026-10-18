@@ -1,0 +1,24 @@
+{
+  "created_at_utc": "2026-10-18T00:43:16.516422+00:00",
+  "status": "ok",
+  "source_dir": "/home/y00951466/sglang_exprt_dump/dataset/cascade_balanced_4k/router_results",
+  "output_dir": "/home/y00951466/sglang_exprt_dump/dataset/cascade_balanced_4k/router_results_uint8",
+  "conversion": "lossless int32 -> uint8",
+  "lossless_verified": true,
+  "route_files": 4000,
+  "route_tokens": 2048000,
+  "route_shape": [
+    512,
+    43,
+    6
+  ],
+  "expert_id_min": 0,
+  "expert_id_max": 255,
+  "source_route_data_bytes": 2113536000,
+  "uint8_route_data_bytes": 528384000,
+  "uint8_route_file_bytes": 528896000,
+  "space_ratio": 0.25,
+  "source_mapping_sha256": "f5ca9c9677794ad7484c6f253f0bc61cd9d67c691ccccd9b78e7226c88d5eff0",
+  "source_results_sha256": "2483d0007332d2f0aa38ca2ff37b9fb11dc7b314db69821009625fa327ed6a3a",
+  "source_errors_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
