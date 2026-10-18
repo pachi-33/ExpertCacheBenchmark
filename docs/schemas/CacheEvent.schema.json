@@ -1,0 +1,116 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "minimum": 0,
+      "title": "Event Id",
+      "type": "integer"
+    },
+    "phase": {
+      "enum": [
+        "initialization",
+        "warmup",
+        "evaluation"
+      ],
+      "title": "Phase",
+      "type": "string"
+    },
+    "step_id": {
+      "title": "Step Id",
+      "type": "integer"
+    },
+    "hook": {
+      "title": "Hook",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "transfer_start",
+        "transfer_complete",
+        "evict",
+        "pin",
+        "unpin",
+        "quota",
+        "restore"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "layer_id": {
+      "default": -1,
+      "title": "Layer Id",
+      "type": "integer"
+    },
+    "expert_id": {
+      "default": -1,
+      "title": "Expert Id",
+      "type": "integer"
+    },
+    "units": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Units",
+      "type": "integer"
+    },
+    "reason": {
+      "default": "",
+      "title": "Reason",
+      "type": "string"
+    },
+    "transfer_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Transfer Id"
+    },
+    "destination": {
+      "anyOf": [
+        {
+          "enum": [
+            "cache",
+            "workspace"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Destination"
+    },
+    "logical_tick": {
+      "minimum": 0,
+      "title": "Logical Tick",
+      "type": "integer"
+    },
+    "simulated_time": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Simulated Time"
+    }
+  },
+  "required": [
+    "event_id",
+    "phase",
+    "step_id",
+    "hook",
+    "kind",
+    "logical_tick"
+  ],
+  "title": "CacheEvent",
+  "type": "object"
+}

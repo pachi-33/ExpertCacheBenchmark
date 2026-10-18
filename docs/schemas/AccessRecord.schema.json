@@ -1,0 +1,64 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "phase": {
+      "enum": [
+        "warmup",
+        "evaluation"
+      ],
+      "title": "Phase",
+      "type": "string"
+    },
+    "step_id": {
+      "minimum": 0,
+      "title": "Step Id",
+      "type": "integer"
+    },
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "token_index": {
+      "minimum": 0,
+      "title": "Token Index",
+      "type": "integer"
+    },
+    "layer_id": {
+      "minimum": 0,
+      "title": "Layer Id",
+      "type": "integer"
+    },
+    "expert_ids": {
+      "items": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "title": "Expert Ids",
+      "type": "array"
+    },
+    "hit_mask": {
+      "items": {
+        "type": "boolean"
+      },
+      "title": "Hit Mask",
+      "type": "array"
+    },
+    "hit_count": {
+      "minimum": 0,
+      "title": "Hit Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "phase",
+    "step_id",
+    "request_id",
+    "token_index",
+    "layer_id",
+    "expert_ids",
+    "hit_mask",
+    "hit_count"
+  ],
+  "title": "AccessRecord",
+  "type": "object"
+}

@@ -1,0 +1,75 @@
+{
+  "$defs": {
+    "ProfileEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "layer_id": {
+          "minimum": 0,
+          "title": "Layer Id",
+          "type": "integer"
+        },
+        "expert_id": {
+          "minimum": 0,
+          "title": "Expert Id",
+          "type": "integer"
+        },
+        "count": {
+          "minimum": 0,
+          "title": "Count",
+          "type": "number"
+        }
+      },
+      "required": [
+        "layer_id",
+        "expert_id",
+        "count"
+      ],
+      "title": "ProfileEntry",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "model_id": {
+      "title": "Model Id",
+      "type": "string"
+    },
+    "source_fingerprint": {
+      "title": "Source Fingerprint",
+      "type": "string"
+    },
+    "source_request_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Request Ids",
+      "type": "array"
+    },
+    "provenance": {
+      "title": "Provenance",
+      "type": "string"
+    },
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/ProfileEntry"
+      },
+      "title": "Entries",
+      "type": "array"
+    }
+  },
+  "required": [
+    "model_id",
+    "source_fingerprint",
+    "source_request_ids",
+    "provenance",
+    "entries"
+  ],
+  "title": "Profile",
+  "type": "object"
+}

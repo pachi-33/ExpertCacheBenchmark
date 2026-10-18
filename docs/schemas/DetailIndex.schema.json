@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "AccessShard": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "phase": {
+          "enum": [
+            "warmup",
+            "evaluation"
+          ],
+          "title": "Phase",
+          "type": "string"
+        },
+        "rows": {
+          "minimum": 0,
+          "title": "Rows",
+          "type": "integer"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "phase",
+        "rows",
+        "sha256"
+      ],
+      "title": "AccessShard",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sealed": {
+      "title": "Sealed",
+      "type": "boolean"
+    },
+    "shards": {
+      "items": {
+        "$ref": "#/$defs/AccessShard"
+      },
+      "title": "Shards",
+      "type": "array"
+    },
+    "events_path": {
+      "title": "Events Path",
+      "type": "string"
+    },
+    "events_sha256": {
+      "title": "Events Sha256",
+      "type": "string"
+    },
+    "event_count": {
+      "minimum": 0,
+      "title": "Event Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "sealed",
+    "shards",
+    "events_path",
+    "events_sha256",
+    "event_count"
+  ],
+  "title": "DetailIndex",
+  "type": "object"
+}

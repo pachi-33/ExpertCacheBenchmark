@@ -1,0 +1,335 @@
+{
+  "$defs": {
+    "CacheConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "capacity_units": {
+          "minimum": 0,
+          "title": "Capacity Units",
+          "type": "integer"
+        },
+        "workspace_units": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Workspace Units",
+          "type": "integer"
+        },
+        "default_expert_units": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Default Expert Units",
+          "type": "integer"
+        },
+        "expert_sizes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExpertSize"
+          },
+          "title": "Expert Sizes",
+          "type": "array"
+        },
+        "unit_name": {
+          "default": "virtual_expert",
+          "title": "Unit Name",
+          "type": "string"
+        },
+        "allocation": {
+          "default": "global",
+          "enum": [
+            "global",
+            "fixed_per_layer",
+            "dynamic_per_layer"
+          ],
+          "title": "Allocation",
+          "type": "string"
+        },
+        "layer_capacity_units": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Layer Capacity Units",
+          "type": "object"
+        }
+      },
+      "required": [
+        "capacity_units"
+      ],
+      "title": "CacheConfig",
+      "type": "object"
+    },
+    "ExpertRef": {
+      "additionalProperties": false,
+      "properties": {
+        "layer_id": {
+          "minimum": 0,
+          "title": "Layer Id",
+          "type": "integer"
+        },
+        "expert_id": {
+          "minimum": 0,
+          "title": "Expert Id",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "layer_id",
+        "expert_id"
+      ],
+      "title": "ExpertRef",
+      "type": "object"
+    },
+    "ExpertSize": {
+      "additionalProperties": false,
+      "properties": {
+        "layer_id": {
+          "minimum": 0,
+          "title": "Layer Id",
+          "type": "integer"
+        },
+        "expert_id": {
+          "minimum": 0,
+          "title": "Expert Id",
+          "type": "integer"
+        },
+        "size_units": {
+          "exclusiveMinimum": 0,
+          "title": "Size Units",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "layer_id",
+        "expert_id",
+        "size_units"
+      ],
+      "title": "ExpertSize",
+      "type": "object"
+    },
+    "InitConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "cold",
+          "enum": [
+            "cold",
+            "preload",
+            "profile",
+            "warmup",
+            "restore"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "experts": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExpertRef"
+          },
+          "title": "Experts",
+          "type": "array"
+        },
+        "profile_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Profile Path"
+        },
+        "warmup_dataset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warmup Dataset"
+        },
+        "warmup_max_requests": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warmup Max Requests"
+        },
+        "warmup_max_tokens": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warmup Max Tokens"
+        },
+        "snapshot_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Snapshot Path"
+        }
+      },
+      "title": "InitConfig",
+      "type": "object"
+    },
+    "PolicyConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "default": "lfu",
+          "title": "Name",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "title": "PolicyConfig",
+      "type": "object"
+    },
+    "SchedulerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_size": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "order": {
+          "default": "dataset",
+          "enum": [
+            "dataset",
+            "shuffled"
+          ],
+          "title": "Order",
+          "type": "string"
+        },
+        "seed": {
+          "default": 0,
+          "title": "Seed",
+          "type": "integer"
+        },
+        "request_offset": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Request Offset",
+          "type": "integer"
+        },
+        "max_requests": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Requests"
+        },
+        "max_tokens": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Tokens"
+        }
+      },
+      "title": "SchedulerConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "dataset": {
+      "title": "Dataset",
+      "type": "string"
+    },
+    "cache": {
+      "$ref": "#/$defs/CacheConfig"
+    },
+    "initialization": {
+      "$ref": "#/$defs/InitConfig"
+    },
+    "policy": {
+      "$ref": "#/$defs/PolicyConfig"
+    },
+    "scheduler": {
+      "$ref": "#/$defs/SchedulerConfig"
+    },
+    "visibility": {
+      "default": "causal",
+      "enum": [
+        "causal",
+        "oracle"
+      ],
+      "title": "Visibility",
+      "type": "string"
+    },
+    "timing_mode": {
+      "const": "instant",
+      "default": "instant",
+      "title": "Timing Mode",
+      "type": "string"
+    },
+    "summary_hooks": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Summary Hooks",
+      "type": "array"
+    },
+    "detail_chunk_rows": {
+      "default": 16384,
+      "exclusiveMinimum": 0,
+      "title": "Detail Chunk Rows",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "dataset",
+    "cache"
+  ],
+  "title": "RunConfig",
+  "type": "object"
+}

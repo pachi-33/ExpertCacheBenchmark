@@ -1,0 +1,559 @@
+{
+  "$defs": {
+    "CacheConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "capacity_units": {
+          "minimum": 0,
+          "title": "Capacity Units",
+          "type": "integer"
+        },
+        "workspace_units": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Workspace Units",
+          "type": "integer"
+        },
+        "default_expert_units": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Default Expert Units",
+          "type": "integer"
+        },
+        "expert_sizes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExpertSize"
+          },
+          "title": "Expert Sizes",
+          "type": "array"
+        },
+        "unit_name": {
+          "default": "virtual_expert",
+          "title": "Unit Name",
+          "type": "string"
+        },
+        "allocation": {
+          "default": "global",
+          "enum": [
+            "global",
+            "fixed_per_layer",
+            "dynamic_per_layer"
+          ],
+          "title": "Allocation",
+          "type": "string"
+        },
+        "layer_capacity_units": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Layer Capacity Units",
+          "type": "object"
+        }
+      },
+      "required": [
+        "capacity_units"
+      ],
+      "title": "CacheConfig",
+      "type": "object"
+    },
+    "DatasetManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "num_layers": {
+          "exclusiveMinimum": 0,
+          "title": "Num Layers",
+          "type": "integer"
+        },
+        "num_experts": {
+          "exclusiveMinimum": 0,
+          "title": "Num Experts",
+          "type": "integer"
+        },
+        "top_k": {
+          "exclusiveMinimum": 0,
+          "title": "Top K",
+          "type": "integer"
+        },
+        "route_dtype": {
+          "default": "uint8",
+          "enum": [
+            "uint8",
+            "uint16",
+            "uint32"
+          ],
+          "title": "Route Dtype",
+          "type": "string"
+        },
+        "axes": {
+          "default": [
+            "token",
+            "layer",
+            "topk"
+          ],
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Axes",
+          "type": "array"
+        },
+        "valid_layers": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Valid Layers",
+          "type": "array"
+        },
+        "excluded_layer_reasons": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Excluded Layer Reasons",
+          "type": "object"
+        },
+        "requests": {
+          "items": {
+            "$ref": "#/$defs/TraceRequest"
+          },
+          "title": "Requests",
+          "type": "array"
+        }
+      },
+      "required": [
+        "model_id",
+        "num_layers",
+        "num_experts",
+        "top_k",
+        "valid_layers",
+        "requests"
+      ],
+      "title": "DatasetManifest",
+      "type": "object"
+    },
+    "ExpertRef": {
+      "additionalProperties": false,
+      "properties": {
+        "layer_id": {
+          "minimum": 0,
+          "title": "Layer Id",
+          "type": "integer"
+        },
+        "expert_id": {
+          "minimum": 0,
+          "title": "Expert Id",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "layer_id",
+        "expert_id"
+      ],
+      "title": "ExpertRef",
+      "type": "object"
+    },
+    "ExpertSize": {
+      "additionalProperties": false,
+      "properties": {
+        "layer_id": {
+          "minimum": 0,
+          "title": "Layer Id",
+          "type": "integer"
+        },
+        "expert_id": {
+          "minimum": 0,
+          "title": "Expert Id",
+          "type": "integer"
+        },
+        "size_units": {
+          "exclusiveMinimum": 0,
+          "title": "Size Units",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "layer_id",
+        "expert_id",
+        "size_units"
+      ],
+      "title": "ExpertSize",
+      "type": "object"
+    },
+    "InitConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "cold",
+          "enum": [
+            "cold",
+            "preload",
+            "profile",
+            "warmup",
+            "restore"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "experts": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ExpertRef"
+          },
+          "title": "Experts",
+          "type": "array"
+        },
+        "profile_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Profile Path"
+        },
+        "warmup_dataset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warmup Dataset"
+        },
+        "warmup_max_requests": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warmup Max Requests"
+        },
+        "warmup_max_tokens": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warmup Max Tokens"
+        },
+        "snapshot_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Snapshot Path"
+        }
+      },
+      "title": "InitConfig",
+      "type": "object"
+    },
+    "PolicyConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "default": "lfu",
+          "title": "Name",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "title": "PolicyConfig",
+      "type": "object"
+    },
+    "RunConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "dataset": {
+          "title": "Dataset",
+          "type": "string"
+        },
+        "cache": {
+          "$ref": "#/$defs/CacheConfig"
+        },
+        "initialization": {
+          "$ref": "#/$defs/InitConfig"
+        },
+        "policy": {
+          "$ref": "#/$defs/PolicyConfig"
+        },
+        "scheduler": {
+          "$ref": "#/$defs/SchedulerConfig"
+        },
+        "visibility": {
+          "default": "causal",
+          "enum": [
+            "causal",
+            "oracle"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "timing_mode": {
+          "const": "instant",
+          "default": "instant",
+          "title": "Timing Mode",
+          "type": "string"
+        },
+        "summary_hooks": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Summary Hooks",
+          "type": "array"
+        },
+        "detail_chunk_rows": {
+          "default": 16384,
+          "exclusiveMinimum": 0,
+          "title": "Detail Chunk Rows",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "dataset",
+        "cache"
+      ],
+      "title": "RunConfig",
+      "type": "object"
+    },
+    "SchedulerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_size": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Batch Size",
+          "type": "integer"
+        },
+        "order": {
+          "default": "dataset",
+          "enum": [
+            "dataset",
+            "shuffled"
+          ],
+          "title": "Order",
+          "type": "string"
+        },
+        "seed": {
+          "default": 0,
+          "title": "Seed",
+          "type": "integer"
+        },
+        "request_offset": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Request Offset",
+          "type": "integer"
+        },
+        "max_requests": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Requests"
+        },
+        "max_tokens": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Tokens"
+        }
+      },
+      "title": "SchedulerConfig",
+      "type": "object"
+    },
+    "TraceRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "route_file": {
+          "title": "Route File",
+          "type": "string"
+        },
+        "token_count": {
+          "exclusiveMinimum": 0,
+          "title": "Token Count",
+          "type": "integer"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "request_id",
+        "route_file",
+        "token_count"
+      ],
+      "title": "TraceRequest",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "framework_version": {
+      "title": "Framework Version",
+      "type": "string"
+    },
+    "framework_revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Framework Revision"
+    },
+    "source_fingerprint": {
+      "title": "Source Fingerprint",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "running",
+        "detail_complete",
+        "complete",
+        "failed"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "config": {
+      "$ref": "#/$defs/RunConfig"
+    },
+    "dataset_fingerprint": {
+      "title": "Dataset Fingerprint",
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": true,
+      "title": "Inputs",
+      "type": "object"
+    },
+    "dataset": {
+      "$ref": "#/$defs/DatasetManifest"
+    },
+    "requests": {
+      "additionalProperties": {
+        "items": {
+          "$ref": "#/$defs/TraceRequest"
+        },
+        "type": "array"
+      },
+      "title": "Requests",
+      "type": "object"
+    },
+    "access_dtype": {
+      "items": {},
+      "title": "Access Dtype",
+      "type": "array"
+    },
+    "policy_metadata": {
+      "additionalProperties": true,
+      "title": "Policy Metadata",
+      "type": "object"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    }
+  },
+  "required": [
+    "framework_version",
+    "source_fingerprint",
+    "status",
+    "config",
+    "dataset_fingerprint",
+    "dataset",
+    "requests",
+    "access_dtype"
+  ],
+  "title": "RunManifest",
+  "type": "object"
+}

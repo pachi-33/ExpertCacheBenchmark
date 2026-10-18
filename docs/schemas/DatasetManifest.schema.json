@@ -1,0 +1,126 @@
+{
+  "$defs": {
+    "TraceRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "route_file": {
+          "title": "Route File",
+          "type": "string"
+        },
+        "token_count": {
+          "exclusiveMinimum": 0,
+          "title": "Token Count",
+          "type": "integer"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "request_id",
+        "route_file",
+        "token_count"
+      ],
+      "title": "TraceRequest",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "model_id": {
+      "title": "Model Id",
+      "type": "string"
+    },
+    "num_layers": {
+      "exclusiveMinimum": 0,
+      "title": "Num Layers",
+      "type": "integer"
+    },
+    "num_experts": {
+      "exclusiveMinimum": 0,
+      "title": "Num Experts",
+      "type": "integer"
+    },
+    "top_k": {
+      "exclusiveMinimum": 0,
+      "title": "Top K",
+      "type": "integer"
+    },
+    "route_dtype": {
+      "default": "uint8",
+      "enum": [
+        "uint8",
+        "uint16",
+        "uint32"
+      ],
+      "title": "Route Dtype",
+      "type": "string"
+    },
+    "axes": {
+      "default": [
+        "token",
+        "layer",
+        "topk"
+      ],
+      "maxItems": 3,
+      "minItems": 3,
+      "prefixItems": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "title": "Axes",
+      "type": "array"
+    },
+    "valid_layers": {
+      "items": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "title": "Valid Layers",
+      "type": "array"
+    },
+    "excluded_layer_reasons": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Excluded Layer Reasons",
+      "type": "object"
+    },
+    "requests": {
+      "items": {
+        "$ref": "#/$defs/TraceRequest"
+      },
+      "title": "Requests",
+      "type": "array"
+    }
+  },
+  "required": [
+    "model_id",
+    "num_layers",
+    "num_experts",
+    "top_k",
+    "valid_layers",
+    "requests"
+  ],
+  "title": "DatasetManifest",
+  "type": "object"
+}
