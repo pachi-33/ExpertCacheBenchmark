@@ -1,0 +1,817 @@
+{
+  "created_at_utc": "2026-10-18T00:10:52.034568+00:00",
+  "source_dir": "/home/y00951466/sglang_exprt_dump/dataset/cascade_balanced_4k/router_results",
+  "output_dir": "/home/y00951466/sglang_exprt_dump/cache_benchmark/dataset/router_results_sample100",
+  "selection": "random_without_replacement",
+  "seed": 20261018,
+  "source_count": 4000,
+  "sample_count": 100,
+  "source_mapping_sha256": "f5ca9c9677794ad7484c6f253f0bc61cd9d67c691ccccd9b78e7226c88d5eff0",
+  "source_results_sha256": "2483d0007332d2f0aa38ca2ff37b9fb11dc7b314db69821009625fa327ed6a3a",
+  "source_errors_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "dataset_indices": [
+    1,
+    122,
+    131,
+    175,
+    201,
+    229,
+    237,
+    257,
+    261,
+    311,
+    316,
+    324,
+    371,
+    394,
+    398,
+    419,
+    454,
+    471,
+    473,
+    517,
+    700,
+    760,
+    809,
+    822,
+    868,
+    904,
+    910,
+    935,
+    981,
+    1049,
+    1116,
+    1205,
+    1349,
+    1381,
+    1764,
+    1873,
+    1882,
+    1939,
+    1987,
+    2011,
+    2053,
+    2057,
+    2080,
+    2099,
+    2121,
+    2126,
+    2210,
+    2232,
+    2242,
+    2243,
+    2278,
+    2312,
+    2326,
+    2358,
+    2387,
+    2411,
+    2485,
+    2529,
+    2562,
+    2622,
+    2791,
+    2813,
+    2822,
+    2901,
+    2919,
+    2937,
+    2996,
+    3010,
+    3067,
+    3083,
+    3167,
+    3198,
+    3207,
+    3217,
+    3230,
+    3240,
+    3267,
+    3353,
+    3363,
+    3369,
+    3411,
+    3451,
+    3484,
+    3509,
+    3536,
+    3541,
+    3558,
+    3586,
+    3588,
+    3606,
+    3676,
+    3695,
+    3704,
+    3709,
+    3779,
+    3787,
+    3800,
+    3900,
+    3924,
+    3933
+  ],
+  "entries": [
+    {
+      "dataset_index": 1,
+      "prompt_id": "math-00-000001@assistant-0002",
+      "sample_id": "math-00-000001",
+      "route_file": "routes/000001__math-00-000001_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 122,
+      "prompt_id": "math-00-000122@assistant-0002",
+      "sample_id": "math-00-000122",
+      "route_file": "routes/000122__math-00-000122_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 131,
+      "prompt_id": "math-00-000131@assistant-0002",
+      "sample_id": "math-00-000131",
+      "route_file": "routes/000131__math-00-000131_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 175,
+      "prompt_id": "math-00-000175@assistant-0002",
+      "sample_id": "math-00-000175",
+      "route_file": "routes/000175__math-00-000175_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 201,
+      "prompt_id": "math-00-000201@assistant-0002",
+      "sample_id": "math-00-000201",
+      "route_file": "routes/000201__math-00-000201_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 229,
+      "prompt_id": "math-00-000229@assistant-0002",
+      "sample_id": "math-00-000229",
+      "route_file": "routes/000229__math-00-000229_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 237,
+      "prompt_id": "math-00-000237@assistant-0002",
+      "sample_id": "math-00-000237",
+      "route_file": "routes/000237__math-00-000237_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 257,
+      "prompt_id": "math-00-000257@assistant-0002",
+      "sample_id": "math-00-000257",
+      "route_file": "routes/000257__math-00-000257_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 261,
+      "prompt_id": "math-00-000261@assistant-0002",
+      "sample_id": "math-00-000261",
+      "route_file": "routes/000261__math-00-000261_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 311,
+      "prompt_id": "math-00-000311@assistant-0002",
+      "sample_id": "math-00-000311",
+      "route_file": "routes/000311__math-00-000311_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 316,
+      "prompt_id": "math-00-000316@assistant-0002",
+      "sample_id": "math-00-000316",
+      "route_file": "routes/000316__math-00-000316_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 324,
+      "prompt_id": "math-00-000324@assistant-0002",
+      "sample_id": "math-00-000324",
+      "route_file": "routes/000324__math-00-000324_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 371,
+      "prompt_id": "math-00-000371@assistant-0002",
+      "sample_id": "math-00-000371",
+      "route_file": "routes/000371__math-00-000371_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 394,
+      "prompt_id": "math-00-000394@assistant-0002",
+      "sample_id": "math-00-000394",
+      "route_file": "routes/000394__math-00-000394_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 398,
+      "prompt_id": "math-00-000398@assistant-0002",
+      "sample_id": "math-00-000398",
+      "route_file": "routes/000398__math-00-000398_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 419,
+      "prompt_id": "math-01-000019@assistant-0002",
+      "sample_id": "math-01-000019",
+      "route_file": "routes/000419__math-01-000019_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 454,
+      "prompt_id": "math-01-000054@assistant-0002",
+      "sample_id": "math-01-000054",
+      "route_file": "routes/000454__math-01-000054_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 471,
+      "prompt_id": "math-01-000071@assistant-0002",
+      "sample_id": "math-01-000071",
+      "route_file": "routes/000471__math-01-000071_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 473,
+      "prompt_id": "math-01-000073@assistant-0002",
+      "sample_id": "math-01-000073",
+      "route_file": "routes/000473__math-01-000073_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 517,
+      "prompt_id": "math-01-000117@assistant-0002",
+      "sample_id": "math-01-000117",
+      "route_file": "routes/000517__math-01-000117_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 700,
+      "prompt_id": "math-02-000000@assistant-0004",
+      "sample_id": "math-02-000000",
+      "route_file": "routes/000700__math-02-000000_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 760,
+      "prompt_id": "math-02-000060@assistant-0020",
+      "sample_id": "math-02-000060",
+      "route_file": "routes/000760__math-02-000060_assistant-0020.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 809,
+      "prompt_id": "math-02-000109@assistant-0012",
+      "sample_id": "math-02-000109",
+      "route_file": "routes/000809__math-02-000109_assistant-0012.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 822,
+      "prompt_id": "math-02-000122@assistant-0004",
+      "sample_id": "math-02-000122",
+      "route_file": "routes/000822__math-02-000122_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 868,
+      "prompt_id": "math-02-000168@assistant-0018",
+      "sample_id": "math-02-000168",
+      "route_file": "routes/000868__math-02-000168_assistant-0018.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 904,
+      "prompt_id": "math-02-000204@assistant-0004",
+      "sample_id": "math-02-000204",
+      "route_file": "routes/000904__math-02-000204_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 910,
+      "prompt_id": "math-02-000210@assistant-0018",
+      "sample_id": "math-02-000210",
+      "route_file": "routes/000910__math-02-000210_assistant-0018.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 935,
+      "prompt_id": "math-02-000235@assistant-0004",
+      "sample_id": "math-02-000235",
+      "route_file": "routes/000935__math-02-000235_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 981,
+      "prompt_id": "math-02-000281@assistant-0020",
+      "sample_id": "math-02-000281",
+      "route_file": "routes/000981__math-02-000281_assistant-0020.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1049,
+      "prompt_id": "chat-03-000049@assistant-0008",
+      "sample_id": "chat-03-000049",
+      "route_file": "routes/001049__chat-03-000049_assistant-0008.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1116,
+      "prompt_id": "chat-03-000116@assistant-0004",
+      "sample_id": "chat-03-000116",
+      "route_file": "routes/001116__chat-03-000116_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1205,
+      "prompt_id": "chat-03-000205@assistant-0002",
+      "sample_id": "chat-03-000205",
+      "route_file": "routes/001205__chat-03-000205_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1349,
+      "prompt_id": "chat-04-000099@assistant-0002",
+      "sample_id": "chat-04-000099",
+      "route_file": "routes/001349__chat-04-000099_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1381,
+      "prompt_id": "chat-04-000131@assistant-0002",
+      "sample_id": "chat-04-000131",
+      "route_file": "routes/001381__chat-04-000131_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1764,
+      "prompt_id": "chat-06-000014@assistant-0004",
+      "sample_id": "chat-06-000014",
+      "route_file": "routes/001764__chat-06-000014_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1873,
+      "prompt_id": "chat-06-000123@assistant-0006",
+      "sample_id": "chat-06-000123",
+      "route_file": "routes/001873__chat-06-000123_assistant-0006.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1882,
+      "prompt_id": "chat-06-000132@assistant-0010",
+      "sample_id": "chat-06-000132",
+      "route_file": "routes/001882__chat-06-000132_assistant-0010.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1939,
+      "prompt_id": "chat-06-000189@assistant-0004",
+      "sample_id": "chat-06-000189",
+      "route_file": "routes/001939__chat-06-000189_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 1987,
+      "prompt_id": "chat-06-000237@assistant-0006",
+      "sample_id": "chat-06-000237",
+      "route_file": "routes/001987__chat-06-000237_assistant-0006.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2011,
+      "prompt_id": "agent-07-000011@assistant-0018",
+      "sample_id": "agent-07-000011",
+      "route_file": "routes/002011__agent-07-000011_assistant-0018.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2053,
+      "prompt_id": "agent-07-000053@assistant-0008",
+      "sample_id": "agent-07-000053",
+      "route_file": "routes/002053__agent-07-000053_assistant-0008.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2057,
+      "prompt_id": "agent-07-000057@assistant-0004",
+      "sample_id": "agent-07-000057",
+      "route_file": "routes/002057__agent-07-000057_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2080,
+      "prompt_id": "agent-07-000080@assistant-0002",
+      "sample_id": "agent-07-000080",
+      "route_file": "routes/002080__agent-07-000080_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2099,
+      "prompt_id": "agent-07-000099@assistant-0014",
+      "sample_id": "agent-07-000099",
+      "route_file": "routes/002099__agent-07-000099_assistant-0014.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2121,
+      "prompt_id": "agent-07-000121@assistant-0016",
+      "sample_id": "agent-07-000121",
+      "route_file": "routes/002121__agent-07-000121_assistant-0016.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2126,
+      "prompt_id": "agent-07-000126@assistant-0006",
+      "sample_id": "agent-07-000126",
+      "route_file": "routes/002126__agent-07-000126_assistant-0006.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2210,
+      "prompt_id": "agent-07-000210@assistant-0004",
+      "sample_id": "agent-07-000210",
+      "route_file": "routes/002210__agent-07-000210_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2232,
+      "prompt_id": "agent-07-000232@assistant-0014",
+      "sample_id": "agent-07-000232",
+      "route_file": "routes/002232__agent-07-000232_assistant-0014.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2242,
+      "prompt_id": "agent-07-000242@assistant-0010",
+      "sample_id": "agent-07-000242",
+      "route_file": "routes/002242__agent-07-000242_assistant-0010.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2243,
+      "prompt_id": "agent-07-000243@assistant-0004",
+      "sample_id": "agent-07-000243",
+      "route_file": "routes/002243__agent-07-000243_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2278,
+      "prompt_id": "agent-07-000278@assistant-0006",
+      "sample_id": "agent-07-000278",
+      "route_file": "routes/002278__agent-07-000278_assistant-0006.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2312,
+      "prompt_id": "agent-07-000312@assistant-0008",
+      "sample_id": "agent-07-000312",
+      "route_file": "routes/002312__agent-07-000312_assistant-0008.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2326,
+      "prompt_id": "agent-07-000326@assistant-0008",
+      "sample_id": "agent-07-000326",
+      "route_file": "routes/002326__agent-07-000326_assistant-0008.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2358,
+      "prompt_id": "agent-07-000358@assistant-0002",
+      "sample_id": "agent-07-000358",
+      "route_file": "routes/002358__agent-07-000358_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2387,
+      "prompt_id": "agent-07-000387@assistant-0004",
+      "sample_id": "agent-07-000387",
+      "route_file": "routes/002387__agent-07-000387_assistant-0004.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2411,
+      "prompt_id": "agent-07-000411@assistant-0016",
+      "sample_id": "agent-07-000411",
+      "route_file": "routes/002411__agent-07-000411_assistant-0016.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2485,
+      "prompt_id": "agent-07-000485@assistant-0006",
+      "sample_id": "agent-07-000485",
+      "route_file": "routes/002485__agent-07-000485_assistant-0006.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2529,
+      "prompt_id": "agent-08-000029@assistant-0018",
+      "sample_id": "agent-08-000029",
+      "route_file": "routes/002529__agent-08-000029_assistant-0018.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2562,
+      "prompt_id": "agent-08-000062@assistant-0018",
+      "sample_id": "agent-08-000062",
+      "route_file": "routes/002562__agent-08-000062_assistant-0018.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2622,
+      "prompt_id": "agent-08-000122@assistant-0010",
+      "sample_id": "agent-08-000122",
+      "route_file": "routes/002622__agent-08-000122_assistant-0010.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2791,
+      "prompt_id": "agent-08-000291@assistant-0012",
+      "sample_id": "agent-08-000291",
+      "route_file": "routes/002791__agent-08-000291_assistant-0012.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2813,
+      "prompt_id": "agent-08-000313@assistant-0036",
+      "sample_id": "agent-08-000313",
+      "route_file": "routes/002813__agent-08-000313_assistant-0036.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2822,
+      "prompt_id": "agent-08-000322@assistant-0016",
+      "sample_id": "agent-08-000322",
+      "route_file": "routes/002822__agent-08-000322_assistant-0016.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2901,
+      "prompt_id": "agent-08-000401@assistant-0020",
+      "sample_id": "agent-08-000401",
+      "route_file": "routes/002901__agent-08-000401_assistant-0020.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2919,
+      "prompt_id": "agent-08-000419@assistant-0016",
+      "sample_id": "agent-08-000419",
+      "route_file": "routes/002919__agent-08-000419_assistant-0016.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2937,
+      "prompt_id": "agent-08-000437@assistant-0026",
+      "sample_id": "agent-08-000437",
+      "route_file": "routes/002937__agent-08-000437_assistant-0026.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 2996,
+      "prompt_id": "agent-08-000496@assistant-0022",
+      "sample_id": "agent-08-000496",
+      "route_file": "routes/002996__agent-08-000496_assistant-0022.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3010,
+      "prompt_id": "coding_swe-09-000010@assistant-0136",
+      "sample_id": "coding_swe-09-000010",
+      "route_file": "routes/003010__coding_swe-09-000010_assistant-0136.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3067,
+      "prompt_id": "coding_swe-09-000067@assistant-0060",
+      "sample_id": "coding_swe-09-000067",
+      "route_file": "routes/003067__coding_swe-09-000067_assistant-0060.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3083,
+      "prompt_id": "coding_swe-09-000083@assistant-0138",
+      "sample_id": "coding_swe-09-000083",
+      "route_file": "routes/003083__coding_swe-09-000083_assistant-0138.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3167,
+      "prompt_id": "coding_swe-09-000167@assistant-0080",
+      "sample_id": "coding_swe-09-000167",
+      "route_file": "routes/003167__coding_swe-09-000167_assistant-0080.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3198,
+      "prompt_id": "coding_swe-09-000198@assistant-0142",
+      "sample_id": "coding_swe-09-000198",
+      "route_file": "routes/003198__coding_swe-09-000198_assistant-0142.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3207,
+      "prompt_id": "coding_swe-09-000207@assistant-0142",
+      "sample_id": "coding_swe-09-000207",
+      "route_file": "routes/003207__coding_swe-09-000207_assistant-0142.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3217,
+      "prompt_id": "coding_swe-09-000217@assistant-0094",
+      "sample_id": "coding_swe-09-000217",
+      "route_file": "routes/003217__coding_swe-09-000217_assistant-0094.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3230,
+      "prompt_id": "coding_swe-09-000230@assistant-0086",
+      "sample_id": "coding_swe-09-000230",
+      "route_file": "routes/003230__coding_swe-09-000230_assistant-0086.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3240,
+      "prompt_id": "coding_swe-09-000240@assistant-0114",
+      "sample_id": "coding_swe-09-000240",
+      "route_file": "routes/003240__coding_swe-09-000240_assistant-0114.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3267,
+      "prompt_id": "coding_swe-09-000267@assistant-0120",
+      "sample_id": "coding_swe-09-000267",
+      "route_file": "routes/003267__coding_swe-09-000267_assistant-0120.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3353,
+      "prompt_id": "coding_swe-09-000353@assistant-0120",
+      "sample_id": "coding_swe-09-000353",
+      "route_file": "routes/003353__coding_swe-09-000353_assistant-0120.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3363,
+      "prompt_id": "coding_swe-09-000363@assistant-0088",
+      "sample_id": "coding_swe-09-000363",
+      "route_file": "routes/003363__coding_swe-09-000363_assistant-0088.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3369,
+      "prompt_id": "coding_swe-09-000369@assistant-0130",
+      "sample_id": "coding_swe-09-000369",
+      "route_file": "routes/003369__coding_swe-09-000369_assistant-0130.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3411,
+      "prompt_id": "coding_swe-09-000411@assistant-0080",
+      "sample_id": "coding_swe-09-000411",
+      "route_file": "routes/003411__coding_swe-09-000411_assistant-0080.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3451,
+      "prompt_id": "coding_swe-09-000451@assistant-0114",
+      "sample_id": "coding_swe-09-000451",
+      "route_file": "routes/003451__coding_swe-09-000451_assistant-0114.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3484,
+      "prompt_id": "coding_swe-09-000484@assistant-0102",
+      "sample_id": "coding_swe-09-000484",
+      "route_file": "routes/003484__coding_swe-09-000484_assistant-0102.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3509,
+      "prompt_id": "coding_swe-10-000009@assistant-0002",
+      "sample_id": "coding_swe-10-000009",
+      "route_file": "routes/003509__coding_swe-10-000009_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3536,
+      "prompt_id": "coding_swe-10-000036@assistant-0002",
+      "sample_id": "coding_swe-10-000036",
+      "route_file": "routes/003536__coding_swe-10-000036_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3541,
+      "prompt_id": "coding_swe-10-000041@assistant-0002",
+      "sample_id": "coding_swe-10-000041",
+      "route_file": "routes/003541__coding_swe-10-000041_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3558,
+      "prompt_id": "coding_swe-10-000058@assistant-0002",
+      "sample_id": "coding_swe-10-000058",
+      "route_file": "routes/003558__coding_swe-10-000058_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3586,
+      "prompt_id": "coding_swe-10-000086@assistant-0002",
+      "sample_id": "coding_swe-10-000086",
+      "route_file": "routes/003586__coding_swe-10-000086_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3588,
+      "prompt_id": "coding_swe-10-000088@assistant-0002",
+      "sample_id": "coding_swe-10-000088",
+      "route_file": "routes/003588__coding_swe-10-000088_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3606,
+      "prompt_id": "coding_swe-10-000106@assistant-0002",
+      "sample_id": "coding_swe-10-000106",
+      "route_file": "routes/003606__coding_swe-10-000106_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3676,
+      "prompt_id": "coding_swe-10-000176@assistant-0002",
+      "sample_id": "coding_swe-10-000176",
+      "route_file": "routes/003676__coding_swe-10-000176_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3695,
+      "prompt_id": "coding_swe-10-000195@assistant-0002",
+      "sample_id": "coding_swe-10-000195",
+      "route_file": "routes/003695__coding_swe-10-000195_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3704,
+      "prompt_id": "coding_swe-10-000204@assistant-0002",
+      "sample_id": "coding_swe-10-000204",
+      "route_file": "routes/003704__coding_swe-10-000204_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3709,
+      "prompt_id": "coding_swe-10-000209@assistant-0002",
+      "sample_id": "coding_swe-10-000209",
+      "route_file": "routes/003709__coding_swe-10-000209_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3779,
+      "prompt_id": "coding_swe-10-000279@assistant-0002",
+      "sample_id": "coding_swe-10-000279",
+      "route_file": "routes/003779__coding_swe-10-000279_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3787,
+      "prompt_id": "coding_swe-10-000287@assistant-0002",
+      "sample_id": "coding_swe-10-000287",
+      "route_file": "routes/003787__coding_swe-10-000287_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3800,
+      "prompt_id": "coding_swe-10-000300@assistant-0002",
+      "sample_id": "coding_swe-10-000300",
+      "route_file": "routes/003800__coding_swe-10-000300_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3900,
+      "prompt_id": "coding_swe-10-000400@assistant-0002",
+      "sample_id": "coding_swe-10-000400",
+      "route_file": "routes/003900__coding_swe-10-000400_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3924,
+      "prompt_id": "coding_swe-10-000424@assistant-0002",
+      "sample_id": "coding_swe-10-000424",
+      "route_file": "routes/003924__coding_swe-10-000424_assistant-0002.npy",
+      "route_bytes": 528512
+    },
+    {
+      "dataset_index": 3933,
+      "prompt_id": "coding_swe-10-000433@assistant-0002",
+      "sample_id": "coding_swe-10-000433",
+      "route_file": "routes/003933__coding_swe-10-000433_assistant-0002.npy",
+      "route_bytes": 528512
+    }
+  ],
+  "format": "mapping.jsonl + results.jsonl + errors.jsonl + routes/*.npy, with the original JSONL lines and .npy filenames preserved"
+}
