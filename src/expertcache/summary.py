@@ -16,9 +16,10 @@ class HitRateSummary:
                  for _, a in detail.access_chunks("evaluation")]
         values = np.concatenate(rates) if rates else np.empty(0)
         result = dict(sample_unit="request_token_layer", scale="0_to_1", count=int(values.size),
-                      percentile_method="linear", p10=None, p50=None, p90=None, p99=None, mean=None, median=None)
+                      percentile_method="linear", percentile_order="descending", p10=None, p50=None, p90=None, p99=None, mean=None, median=None)
+        # Rank from highest hit rate down: Pp = ascending quantile Q(100-p).
         if values.size:
-            for name, v in zip(("p10", "p50", "p90", "p99"), np.percentile(values, [10, 50, 90, 99], method="linear")):
+            for name, v in zip(("p10", "p50", "p90", "p99"), np.percentile(values, [90, 50, 10, 1], method="linear")):
                 result[name] = float(v)
             result["mean"] = float(values.mean())
             result["median"] = float(np.median(values))

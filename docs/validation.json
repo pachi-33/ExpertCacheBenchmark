@@ -1,5 +1,5 @@
 {
-  "tests_passed": 27,
+  "tests_passed": 30,
   "runs": [
     {
       "run": "runs/lfu-smoke",
@@ -48,10 +48,11 @@
         "scale": "0_to_1",
         "count": 5120,
         "percentile_method": "linear",
-        "p10": 0.16666666666666666,
+        "percentile_order": "descending",
+        "p10": 0.8333333333333334,
         "p50": 0.5,
-        "p90": 0.8333333333333334,
-        "p99": 1.0,
+        "p90": 0.16666666666666666,
+        "p99": 0.0,
         "mean": 0.5209635416666666,
         "median": 0.5
       },
@@ -96,7 +97,18 @@
       },
       "peak_cache_units": 1024,
       "annotations_reconstructed": 5120,
-      "postprocess_reproduced": true
+      "postprocess_reproduced": true,
+      "processor_implementations": [
+        {
+          "class": "expertcache.summary:HitRateSummary",
+          "source_sha256": "b6f588fcc45ef772fa5f11011d8f1923aa6eeec1807ab03dd1ac5e563ef06209"
+        },
+        {
+          "class": "expertcache.summary:TransferSummary",
+          "source_sha256": "b6f588fcc45ef772fa5f11011d8f1923aa6eeec1807ab03dd1ac5e563ef06209"
+        }
+      ],
+      "descending_percentiles_verified": true
     },
     {
       "run": "runs/lfu-profile-smoke",
@@ -145,10 +157,11 @@
         "scale": "0_to_1",
         "count": 5120,
         "percentile_method": "linear",
-        "p10": 0.16666666666666666,
+        "percentile_order": "descending",
+        "p10": 0.6666666666666666,
         "p50": 0.5,
-        "p90": 0.6666666666666666,
-        "p99": 1.0,
+        "p90": 0.16666666666666666,
+        "p99": 0.0,
         "mean": 0.42568359375,
         "median": 0.5
       },
@@ -193,7 +206,18 @@
       },
       "peak_cache_units": 1024,
       "annotations_reconstructed": 5120,
-      "postprocess_reproduced": true
+      "postprocess_reproduced": true,
+      "processor_implementations": [
+        {
+          "class": "expertcache.summary:HitRateSummary",
+          "source_sha256": "b6f588fcc45ef772fa5f11011d8f1923aa6eeec1807ab03dd1ac5e563ef06209"
+        },
+        {
+          "class": "expertcache.summary:TransferSummary",
+          "source_sha256": "b6f588fcc45ef772fa5f11011d8f1923aa6eeec1807ab03dd1ac5e563ef06209"
+        }
+      ],
+      "descending_percentiles_verified": true
     },
     {
       "run": "runs/strata-smoke",
@@ -248,10 +272,11 @@
         "scale": "0_to_1",
         "count": 5120,
         "percentile_method": "linear",
-        "p10": 0.16666666666666666,
+        "percentile_order": "descending",
+        "p10": 0.8333333333333334,
         "p50": 0.5,
-        "p90": 0.8333333333333334,
-        "p99": 1.0,
+        "p90": 0.16666666666666666,
+        "p99": 0.0,
         "mean": 0.4704752604166667,
         "median": 0.5
       },
@@ -296,12 +321,23 @@
       },
       "peak_cache_units": 1024,
       "annotations_reconstructed": 5120,
-      "postprocess_reproduced": true
+      "postprocess_reproduced": true,
+      "processor_implementations": [
+        {
+          "class": "expertcache.summary:HitRateSummary",
+          "source_sha256": "b6f588fcc45ef772fa5f11011d8f1923aa6eeec1807ab03dd1ac5e563ef06209"
+        },
+        {
+          "class": "expertcache.summary:TransferSummary",
+          "source_sha256": "b6f588fcc45ef772fa5f11011d8f1923aa6eeec1807ab03dd1ac5e563ef06209"
+        }
+      ],
+      "descending_percentiles_verified": true
     }
   ],
   "checks": [
     "every annotation matches original route and event-reconstructed cache snapshot",
-    "all percentile/mean/median values independently recomputed",
+    "descending percentile/mean/median values independently recomputed",
     "transfer start/complete paired and capacity verified",
     "postprocess reproduces summary without changing detail"
   ]

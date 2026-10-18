@@ -53,8 +53,11 @@ class CoreTests(Fixture):
         hit = result["hit_rate"]
         self.assertEqual(hit["count"], 3)
         self.assertAlmostEqual(hit["mean"], 1 / 3)
-        self.assertAlmostEqual(hit["p10"], .1)
-        self.assertEqual([hit[k] for k in ("p50", "p90", "p99", "median")], [.5] * 4)
+        self.assertEqual(hit["percentile_order"], "descending")
+        self.assertEqual(hit["p10"], .5)
+        self.assertAlmostEqual(hit["p90"], .1)
+        self.assertAlmostEqual(hit["p99"], .01)
+        self.assertEqual([hit[k] for k in ("p50", "median")], [.5] * 2)
         self.assertEqual(result, postprocess(output))
         self.assertEqual(result["transfer"]["total_units"], 4)
         for event in reader.events(): CacheEvent.model_validate(event)
