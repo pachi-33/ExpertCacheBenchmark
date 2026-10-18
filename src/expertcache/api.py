@@ -66,6 +66,7 @@ class Probe:
     hit_mask: tuple[tuple[bool, ...], ...]
     unique_keys: tuple[ExpertKey, ...]
     missing: tuple[ExpertKey, ...]
+    cache_tick: int = 0
 
 
 @dataclass(frozen=True)

@@ -70,8 +70,20 @@ run/
   summary.json
 ```
 
-access 分片是结构化 NumPy 数组，字段为 `step_id, request_index, token_index, layer_id, expert_ids[top_k], hit_mask[top_k], hit_count`；request_index 查 manifest 中相应 phase 的请求表。所有标注可导出为符合 `AccessRecord` 的 JSONL。数据文件保存自身的 expert IDs，后处理无需访问原始数据集。
+access 分片是结构化 NumPy 数组，字段为 `probe_tick, step_id, request_index, token_index, layer_id, expert_ids[top_k], hit_mask[top_k], hit_count`；request_index 查 manifest 中相应 phase 的请求表。所有标注可导出为符合 `AccessRecord` 的 JSONL。`probe_tick` 对应判定时已完成的缓存事件逻辑序号，便于从事件重建该次缓存快照；事件的 `context_layer_id` 标明触发 hook 的层，`layer_id` 标明被操作的专家层。数据文件保存自身的 expert IDs，后处理无需访问原始数据集。
 
 Summary 的 `hit_rate` 对所有 evaluation 判断平等聚合，不按 request 或 layer 先求平均。输出 p10/p50/p90/p99/mean/median，数值范围 [0,1]，分位数使用 NumPy 的 linear 插值定义；p50 与 median 相同。`transfer` 按 transfer_complete 累计，避免 start/complete 双计数，报告各阶段搬运及 batch 去重数量。
 
 LFU 使用驻留期间的频次，淘汰后清零；同频次按最近访问顺序淘汰，再按专家键确定并列顺序。当前 batch 的全部路由出现次数都计入频次，缺失专家按首次出现顺序处理。
+
+## Strata
+
+已实现同步 adaptive residency 策略。配置和与真实引擎的差别见 [docs/strata.md](docs/strata.md)。先生成独立 profile，再运行相同条件的两个 smoke：
+
+```bash
+expertcache profile dataset/router_results_sample100/benchmark.json --max-requests 20 --output runs/profile-train20.json
+expertcache run configs/strata-smoke.json --output runs/strata-smoke
+expertcache run configs/lfu-profile-smoke.json --output runs/lfu-profile-smoke
+```
+
+完整留出集评估用 `configs/strata-eval.json` 和 `configs/lfu-eval.json`。Strata 保持初始化后的层内槽位数，缺失专家临时加载，周期性适应换入单独计费。

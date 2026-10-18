@@ -7,7 +7,7 @@ from .data import digest_file, write_json
 
 
 def access_dtype(spec):
-    return np.dtype([("step_id", "<u8"), ("request_index", "<u4"), ("token_index", "<u4"),
+    return np.dtype([("probe_tick", "<u8"), ("step_id", "<u8"), ("request_index", "<u4"), ("token_index", "<u4"),
                      ("layer_id", "<u4"), ("expert_ids", spec.route_dtype, (spec.top_k,)),
                      ("hit_mask", "?", (spec.top_k,)), ("hit_count", "<u4")])
 
@@ -27,7 +27,7 @@ class DetailWriter:
             self.flush()
             self.phase = phase
         for row, experts, hits in zip(routes.step.rows, routes.expert_ids, probe.hit_mask, strict=True):
-            self.buffer[self.position] = (routes.step.step_id, row.request_index, row.token_index,
+            self.buffer[self.position] = (probe.cache_tick, routes.step.step_id, row.request_index, row.token_index,
                                           routes.layer_id, experts, hits, sum(hits))
             self.position += 1
             if self.position == len(self.buffer): self.flush()
@@ -92,7 +92,7 @@ class DetailReader:
         for current_phase, chunk in self.access_chunks(phase):
             requests = self.manifest.requests[current_phase]
             for row in chunk:
-                yield AccessRecord(phase=current_phase, step_id=int(row["step_id"]),
+                yield AccessRecord(probe_tick=int(row["probe_tick"]), phase=current_phase, step_id=int(row["step_id"]),
                                    request_id=requests[int(row["request_index"])].request_id,
                                    token_index=int(row["token_index"]), layer_id=int(row["layer_id"]),
                                    expert_ids=tuple(map(int, row["expert_ids"])),

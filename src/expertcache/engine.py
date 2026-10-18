@@ -36,6 +36,7 @@ class CacheEngine:
         if self.backend.mode != "instant":
             raise ValueError("v1 only supports instant transfers")
         self.event_id = self.transfer_id = self.tick = 0
+        self.context_layer_id = None
         self._view = None
 
     def view(self):
@@ -48,16 +49,17 @@ class CacheEngine:
     def probe(self, routes):
         keys = tuple(dict.fromkeys(routes.keys))
         return Probe(tuple(tuple((routes.layer_id, e) in self.resident for e in row) for row in routes.expert_ids),
-                     keys, tuple(k for k in keys if k not in self.resident))
+                     keys, tuple(k for k in keys if k not in self.resident), self.tick)
 
     def _event(self, kind, phase, step_id, hook, key=(-1, -1), units=0, reason="", transfer_id=None, destination=None):
         self.event_id += 1
         self.tick += 1
         return dict(event_id=self.event_id, phase=phase, step_id=step_id, hook=hook, kind=kind,
                     layer_id=key[0], expert_id=key[1], units=units, reason=reason,
-                    transfer_id=transfer_id, destination=destination, logical_tick=self.tick, simulated_time=None)
+                    transfer_id=transfer_id, destination=destination, context_layer_id=self.context_layer_id, logical_tick=self.tick, simulated_time=None)
 
-    def execute(self, plan, phase, step_id, hook, probe=None):
+    def execute(self, plan, phase, step_id, hook, probe=None, context_layer_id=None):
+        self.context_layer_id = context_layer_id
         if not isinstance(plan, CachePlan):
             raise TypeError("policy hooks must return CachePlan")
         events = []

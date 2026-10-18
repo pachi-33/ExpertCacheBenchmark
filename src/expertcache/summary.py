@@ -4,7 +4,7 @@ import numpy as np
 from .contracts import RunManifest
 from .data import write_json
 from .detail import DetailReader
-from .policies import import_symbol
+from .policies import import_symbol, implementation_identity
 
 
 class HitRateSummary:
@@ -70,7 +70,8 @@ def postprocess(output, extra_hooks=None):
     paths = manifest.config.summary_hooks if extra_hooks is None else tuple(extra_hooks)
     hooks.extend(import_symbol(p)() for p in paths)
     summary = {"schema_version": "1.0", "dataset_fingerprint": manifest.dataset_fingerprint,
-               "summary_hooks": list(paths)}
+               "summary_hooks": list(paths),
+               "processor_implementations": [implementation_identity(h) for h in hooks]}
     for hook in hooks:
         if hook.namespace in summary: raise ValueError(f"duplicate summary namespace {hook.namespace}")
         summary[hook.namespace] = hook.process(detail, manifest)

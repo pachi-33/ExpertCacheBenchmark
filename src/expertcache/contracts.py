@@ -131,6 +131,7 @@ class Profile(Contract):
 
 
 class AccessRecord(Contract):
+    probe_tick: Nonnegative
     phase: Literal["warmup", "evaluation"]
     step_id: Nonnegative
     request_id: str
@@ -159,6 +160,7 @@ class CacheEvent(Contract):
     reason: str = ""
     transfer_id: int | None = None
     destination: Literal["cache", "workspace"] | None = None
+    context_layer_id: int | None = None
     logical_tick: Nonnegative
     simulated_time: float | None = None
 

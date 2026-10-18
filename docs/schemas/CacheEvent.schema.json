@@ -85,6 +85,18 @@
       "default": null,
       "title": "Destination"
     },
+    "context_layer_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Context Layer Id"
+    },
     "logical_tick": {
       "minimum": 0,
       "title": "Logical Tick",

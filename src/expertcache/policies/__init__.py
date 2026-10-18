@@ -19,3 +19,16 @@ def make_policy(config):
     policy = cls(**config.params)
     if not isinstance(policy, CachePolicy): raise TypeError("policy must subclass CachePolicy")
     return policy
+
+
+def implementation_identity(instance):
+    import inspect
+    from ..data import digest_file
+    cls = type(instance)
+    result = {"class": cls.__module__ + ":" + cls.__qualname__}
+    try:
+        path = inspect.getsourcefile(cls)
+        if path: result["source_sha256"] = digest_file(path)
+    except (TypeError, OSError):
+        pass
+    return result

@@ -1,0 +1,7 @@
+{
+  "dataset": "../dataset/router_results_sample100/benchmark.json",
+  "cache": {"capacity_units": 1024, "workspace_units": 1},
+  "initialization": {"mode": "profile", "profile_path": "../runs/profile-train20.json"},
+  "policy": {"name": "lfu"},
+  "scheduler": {"batch_size": 4, "request_offset": 20, "max_requests": 4, "max_tokens": 32}
+}

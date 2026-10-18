@@ -1,16 +1,15 @@
 import hashlib
 import json
 import subprocess
-from dataclasses import replace
 from pathlib import Path
 from types import MappingProxyType
 from . import __version__
-from .api import Action, CachePlan, Context, RequestInfo, Resolution
+from .api import Action, CachePlan, Context, RequestInfo, Resolution, RouteBatch
 from .contracts import RunConfig, RunManifest, Profile
 from .data import Dataset, digest_file, write_json
 from .detail import DetailWriter, access_dtype
 from .engine import CacheEngine
-from .policies import make_policy
+from .policies import make_policy, implementation_identity
 from .scheduler import DecodeScheduler, select_requests
 from .summary import postprocess
 
@@ -67,6 +66,7 @@ class Benchmark:
         self.phase, self.step_id, self.layer_id, self.frontier = "initialization", -1, None, {}
         self.active_dataset, self.active_requests = self.dataset, self.requests
         self.writer = None
+        self._ran = False
 
     def context(self, hook):
         ids = tuple(r.request_id for r in self.active_requests)
@@ -78,15 +78,15 @@ class Benchmark:
 
     def invoke(self, hook, *args, probe=None):
         plan = getattr(self.policy, hook)(self.context(hook), *args)
-        events = self.engine.execute(plan, self.phase, self.step_id, hook, probe)
+        events = self.engine.execute(plan, self.phase, self.step_id, hook, probe, self.layer_id)
         self.writer.append_events(events)
-        if events: self.policy.on_actions_applied(self.context(hook), events)
+        if events: self.policy.on_actions_applied(self.context(hook), tuple(freeze(e) for e in events))
         return events
 
     def _direct_plan(self, plan, hook):
-        events = self.engine.execute(plan, self.phase, self.step_id, hook)
+        events = self.engine.execute(plan, self.phase, self.step_id, hook, context_layer_id=self.layer_id)
         self.writer.append_events(events)
-        if events: self.policy.on_actions_applied(self.context(hook), events)
+        if events: self.policy.on_actions_applied(self.context(hook), tuple(freeze(e) for e in events))
 
     def _replay(self, dataset, requests, scheduler_config, phase, progress=None):
         self.active_dataset, self.active_requests, self.frontier = dataset, requests, {}
@@ -101,7 +101,6 @@ class Benchmark:
             for layer in dataset.spec.valid_layers:
                 self.layer_id = layer
                 self.invoke("on_layer_start", layer)
-                from .api import RouteBatch
                 routes = RouteBatch(step, layer, tuple(dataset.routes(row.request_id, row.token_index, layer) for row in step.rows))
                 for row in step.rows: self.frontier[row.request_id] = (row.token_index, layer)
                 probe = self.engine.probe(routes)
@@ -119,13 +118,17 @@ class Benchmark:
         spec = self.dataset.spec
         return dict(schema_version="1.0", model={k: getattr(spec, k) for k in ("model_id", "num_layers", "num_experts", "top_k", "valid_layers")},
                     cache_config=self.config.cache.model_dump(mode="json"), policy_config=self.config.policy.model_dump(mode="json"),
+                    policy_implementation=implementation_identity(self.policy)["class"],
                     cache=self.engine.state_dict(), policy=self.policy.state_dict())
 
     def run(self, output, progress=None):
+        if self._ran:
+            raise RuntimeError("Benchmark instances are single-use; create a new instance for each run")
+        self._ran = True
         output = Path(output)
         if output.exists(): raise FileExistsError(f"run output already exists: {output}")
         init = self.config.initialization
-        inputs, profile, warmup, warmup_requests = {}, None, None, ()
+        inputs, profile, warmup, warmup_requests = {"policy_implementation": implementation_identity(self.policy)}, None, None, ()
         if init.profile_path:
             profile = Profile.model_validate_json(Path(init.profile_path).read_text())
             if profile.model_id != self.dataset.spec.model_id: raise ValueError("profile model mismatch")
@@ -156,7 +159,7 @@ class Benchmark:
             if init.mode == "restore":
                 snapshot = json.loads(Path(init.snapshot_path).read_text())
                 expected = self._snapshot()
-                for field in ("schema_version", "model", "cache_config", "policy_config"):
+                for field in ("schema_version", "model", "cache_config", "policy_config", "policy_implementation"):
                     if json.dumps(snapshot[field], sort_keys=True) != json.dumps(expected[field], sort_keys=True):
                         raise ValueError(f"snapshot {field} mismatch")
                 self.writer.append_events(self.engine.restore(snapshot["cache"]))

@@ -1,6 +1,11 @@
 {
   "additionalProperties": false,
   "properties": {
+    "probe_tick": {
+      "minimum": 0,
+      "title": "Probe Tick",
+      "type": "integer"
+    },
     "phase": {
       "enum": [
         "warmup",
@@ -50,6 +55,7 @@
     }
   },
   "required": [
+    "probe_tick",
     "phase",
     "step_id",
     "request_id",
