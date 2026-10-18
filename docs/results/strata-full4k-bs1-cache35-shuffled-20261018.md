@@ -2,7 +2,7 @@
 
 全部 4,000 条请求先用 seed=20261018 打乱，前 20 条构建 profile，剩余 3,980 条用于评估。缓存由 profile 初始化，跨请求、跨任务持续保留；任务统计由 summary hook 在同一次回放结束后聚合。
 
-- 模型：Qwen3-Next，40 个有效 MoE 层（3–42），每层 256 专家，top-k=6。每请求评估 512 token。
+- 数据记录的模型标识：`DeepSeek-V4-Flash-w8a8-mtp`，40 个有效 MoE 层（3–42），每层 256 专家，top-k=6。每请求生成并记录 512 个输出 token，不包含 prompt；全部 4,000 条请求的 `completion_tokens=512`，trace 形状为 `[512, 43, 6]`。
 - 常驻池：3,584 / 10,240 virtual expert units（35%）；workspace 另为 1 unit。
 - Strata：每 4 step 适应一次，decay=0.7、min_count=2、min_gain=1.5、max_swaps=96；每层初始槽位数由全局 profile 选取结果决定，适应时在层内替换。
 - 统计单位：每个 request/token/layer 的 hit_count / 6。P10、P50、P90、P99 从高到低排名，分别对应升序 q90、q50、q10、q1，使用线性插值。平均值按全部专家访问计数，与逐层均值相等。
