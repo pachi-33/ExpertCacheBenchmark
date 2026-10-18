@@ -15,6 +15,10 @@
 
 以下命令均在仓库根目录执行，需要 Python 3.11+。
 
+**先准备数据集。** 数据集已从 Git 跟踪中移出，计划单独托管到 Hugging Face，发布后补充下载地址。运行前，请将完整数据集放到 `dataset/router_results_sample100/`，其中应包含 `benchmark.json`、`routes/*.npy` 和配套元数据。已有本地数据可继续使用。
+
+仓库根目录的 `/dataset/` 已加入 `.gitignore`；示例配置仍使用上述本地路径。仅安装依赖和运行单元测试不需要下载数据集。
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate

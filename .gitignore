@@ -6,3 +6,6 @@ __pycache__/
 runs/
 build/
 dist/
+
+# Local datasets; distributed separately via Hugging Face.
+/dataset/
