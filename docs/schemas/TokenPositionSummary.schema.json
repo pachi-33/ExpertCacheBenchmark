@@ -1,0 +1,210 @@
+{
+  "$defs": {
+    "TokenPositionMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "phase": {
+          "const": "evaluation",
+          "default": "evaluation",
+          "title": "Phase",
+          "type": "string"
+        },
+        "axis": {
+          "const": "token_index",
+          "default": "token_index",
+          "title": "Axis",
+          "type": "string"
+        },
+        "index_base": {
+          "const": 0,
+          "default": 0,
+          "title": "Index Base",
+          "type": "integer"
+        },
+        "sample_unit": {
+          "const": "request_token",
+          "default": "request_token",
+          "title": "Sample Unit",
+          "type": "string"
+        },
+        "scale": {
+          "const": "0_to_1",
+          "default": "0_to_1",
+          "title": "Scale",
+          "type": "string"
+        },
+        "percentile_order": {
+          "const": "descending",
+          "default": "descending",
+          "title": "Percentile Order",
+          "type": "string"
+        },
+        "percentile_method": {
+          "const": "linear",
+          "default": "linear",
+          "title": "Percentile Method",
+          "type": "string"
+        },
+        "mean_weighting": {
+          "const": "expert_accesses",
+          "default": "expert_accesses",
+          "title": "Mean Weighting",
+          "type": "string"
+        },
+        "group_by": {
+          "const": "request.metadata.task_type",
+          "default": "request.metadata.task_type",
+          "title": "Group By",
+          "type": "string"
+        },
+        "valid_layers": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Valid Layers",
+          "type": "array"
+        },
+        "top_k": {
+          "exclusiveMinimum": 0,
+          "title": "Top K",
+          "type": "integer"
+        },
+        "expert_accesses_per_request_token": {
+          "exclusiveMinimum": 0,
+          "title": "Expert Accesses Per Request Token",
+          "type": "integer"
+        },
+        "request_count": {
+          "minimum": 0,
+          "title": "Request Count",
+          "type": "integer"
+        },
+        "request_token_count": {
+          "minimum": 0,
+          "title": "Request Token Count",
+          "type": "integer"
+        },
+        "annotation_count": {
+          "minimum": 0,
+          "title": "Annotation Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "valid_layers",
+        "top_k",
+        "expert_accesses_per_request_token",
+        "request_count",
+        "request_token_count",
+        "annotation_count"
+      ],
+      "title": "TokenPositionMetadata",
+      "type": "object"
+    },
+    "TokenPositionPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "token_index": {
+          "minimum": 0,
+          "title": "Token Index",
+          "type": "integer"
+        },
+        "request_count": {
+          "exclusiveMinimum": 0,
+          "title": "Request Count",
+          "type": "integer"
+        },
+        "expert_hits": {
+          "minimum": 0,
+          "title": "Expert Hits",
+          "type": "integer"
+        },
+        "expert_accesses": {
+          "exclusiveMinimum": 0,
+          "title": "Expert Accesses",
+          "type": "integer"
+        },
+        "mean": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Mean",
+          "type": "number"
+        },
+        "p10": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P10",
+          "type": "number"
+        },
+        "p50": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P50",
+          "type": "number"
+        },
+        "p90": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P90",
+          "type": "number"
+        },
+        "p99": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "P99",
+          "type": "number"
+        }
+      },
+      "required": [
+        "token_index",
+        "request_count",
+        "expert_hits",
+        "expert_accesses",
+        "mean",
+        "p10",
+        "p50",
+        "p90",
+        "p99"
+      ],
+      "title": "TokenPositionPoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "metadata": {
+      "$ref": "#/$defs/TokenPositionMetadata"
+    },
+    "overall": {
+      "items": {
+        "$ref": "#/$defs/TokenPositionPoint"
+      },
+      "title": "Overall",
+      "type": "array"
+    },
+    "by_task": {
+      "additionalProperties": {
+        "items": {
+          "$ref": "#/$defs/TokenPositionPoint"
+        },
+        "type": "array"
+      },
+      "title": "By Task",
+      "type": "object"
+    }
+  },
+  "required": [
+    "metadata",
+    "overall",
+    "by_task"
+  ],
+  "title": "TokenPositionSummary",
+  "type": "object"
+}

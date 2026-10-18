@@ -195,3 +195,81 @@ class DetailIndex(Contract):
     events_path: str
     events_sha256: str
     event_count: Nonnegative
+
+
+Rate = Annotated[float, Field(ge=0, le=1)]
+
+
+class TokenPositionPoint(Contract):
+    token_index: Nonnegative
+    request_count: Positive
+    expert_hits: Nonnegative
+    expert_accesses: Positive
+    mean: Rate
+    p10: Rate
+    p50: Rate
+    p90: Rate
+    p99: Rate
+
+    @model_validator(mode="after")
+    def coherent(self):
+        if self.expert_hits > self.expert_accesses:
+            raise ValueError("hits exceed accesses")
+        if abs(self.mean - self.expert_hits / self.expert_accesses) > 1e-12:
+            raise ValueError("mean disagrees with expert counts")
+        if not self.p10 >= self.p50 >= self.p90 >= self.p99:
+            raise ValueError("percentiles must be descending")
+        return self
+
+
+class TokenPositionMetadata(Contract):
+    schema_version: Literal["1.0"] = "1.0"
+    phase: Literal["evaluation"] = "evaluation"
+    axis: Literal["token_index"] = "token_index"
+    index_base: Literal[0] = 0
+    sample_unit: Literal["request_token"] = "request_token"
+    scale: Literal["0_to_1"] = "0_to_1"
+    percentile_order: Literal["descending"] = "descending"
+    percentile_method: Literal["linear"] = "linear"
+    mean_weighting: Literal["expert_accesses"] = "expert_accesses"
+    group_by: Literal["request.metadata.task_type"] = "request.metadata.task_type"
+    valid_layers: tuple[Nonnegative, ...]
+    top_k: Positive
+    expert_accesses_per_request_token: Positive
+    request_count: Nonnegative
+    request_token_count: Nonnegative
+    annotation_count: Nonnegative
+
+
+class TokenPositionSummary(Contract):
+    metadata: TokenPositionMetadata
+    overall: tuple[TokenPositionPoint, ...]
+    by_task: dict[str, tuple[TokenPositionPoint, ...]]
+
+    @model_validator(mode="after")
+    def coherent(self):
+        meta = self.metadata
+        denominator = len(meta.valid_layers) * meta.top_k
+        if not meta.valid_layers or denominator != meta.expert_accesses_per_request_token:
+            raise ValueError("invalid request/token denominator")
+        if meta.annotation_count != meta.request_token_count * len(meta.valid_layers):
+            raise ValueError("annotation count does not cover all layers")
+        for curve in (self.overall, *self.by_task.values()):
+            if [p.token_index for p in curve] != list(range(len(curve))):
+                raise ValueError("token positions must be contiguous from zero")
+            if any(a.request_count < b.request_count for a, b in zip(curve, curve[1:])):
+                raise ValueError("request support cannot increase with token position")
+            if any(p.expert_accesses != p.request_count * denominator for p in curve):
+                raise ValueError("access counts disagree with request support")
+        if sum(p.request_count for p in self.overall) != meta.request_token_count:
+            raise ValueError("request/token total mismatch")
+        if (self.overall[0].request_count if self.overall else 0) != meta.request_count:
+            raise ValueError("request total mismatch")
+        if any(len(curve) > len(self.overall) for curve in self.by_task.values()):
+            raise ValueError("task curve exceeds overall horizon")
+        for t, point in enumerate(self.overall):
+            groups = [curve[t] for curve in self.by_task.values() if t < len(curve)]
+            for field in ("request_count", "expert_hits", "expert_accesses"):
+                if sum(getattr(p, field) for p in groups) != getattr(point, field):
+                    raise ValueError("task counts do not sum to overall")
+        return self

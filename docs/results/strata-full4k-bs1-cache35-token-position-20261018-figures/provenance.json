@@ -1,0 +1,13 @@
+{
+  "summary_path": "/Users/yaobao/Desktop/Workspace-Ascend/ExpertCacheBenchmark/runs/strata-full4k-bs1-cache35-token-position-20261018/summary.json",
+  "summary_sha256": "7ee2a7ffb640d8c5a81313c399358bc948e2d1c803b18c061132d2844fa35b94",
+  "window": 1,
+  "matplotlib_version": "3.11.2",
+  "script_sha256": "aa70c5fbaf030eee81492b061c9e9bff4a8c511e74914b5ed276b3a0449fd203",
+  "figures": {
+    "by-task.png": "156bf8f84d4b33e73341e5144ef95e96ce687432ca5c3decf51f723e452d3ab4",
+    "by-task.svg": "3e7514cd5f32b65576dc4267f6d8beaa7470b752365d8454665630feeb25fbfe",
+    "overall.png": "498fa15010a0d8ac435cf7307b5ec0e8259d19d347a3b7e37b2a78d91ae29384",
+    "overall.svg": "8dc61f2e78c6ef260fe5d96b17d19b6c958f5af2a17561cfe71e5862558da767"
+  }
+}

@@ -2,7 +2,7 @@ from collections import Counter
 from pathlib import Path
 import numpy as np
 from .contracts import RunManifest
-from .data import write_json
+from .data import digest_file, write_json
 from .detail import DetailReader
 from .policies import import_symbol, implementation_identity
 
@@ -52,24 +52,54 @@ class TransferSummary:
                     evaluation_coalesced_miss_occurrences=misses - deduplicated)
 
 
-def postprocess(output, extra_hooks=None):
-    output = Path(output)
+def postprocess(output, extra_hooks=None, *, only_hooks=None, summary_output=None):
+    """Rebuild summaries, optionally writing a separate, read-only-source analysis.
+
+    The historical default still runs both built-ins and overwrites summary.json.
+    Selective processing requires a new output outside the sealed run directory.
+    """
+    from time import monotonic
+    started = monotonic()
+    output = Path(output).resolve()
+    if only_hooks is not None and extra_hooks is not None:
+        raise ValueError("only_hooks and extra_hooks are mutually exclusive")
+    if only_hooks is not None and (not only_hooks or summary_output is None):
+        raise ValueError("only_hooks requires at least one hook and a separate summary_output")
+    destination = Path(summary_output).resolve() if summary_output is not None else output / "summary.json"
+    if summary_output is not None:
+        if destination.is_relative_to(output):
+            raise ValueError("separate summary output must be outside the source run directory")
+        if destination.exists():
+            raise FileExistsError(destination)
     manifest = RunManifest.model_validate_json((output / "manifest.json").read_text())
     if manifest.status not in ("detail_complete", "complete"):
         raise ValueError("run has no complete detail to postprocess")
     detail = DetailReader(output, manifest)
-    hooks = [HitRateSummary(), TransferSummary()]
-    paths = manifest.config.summary_hooks if extra_hooks is None else tuple(extra_hooks)
+    if only_hooks is not None:
+        paths, hooks = tuple(only_hooks), []
+    else:
+        paths = manifest.config.summary_hooks if extra_hooks is None else tuple(extra_hooks)
+        hooks = [HitRateSummary(), TransferSummary()]
     hooks.extend(import_symbol(p)() for p in paths)
     summary = {"schema_version": "1.0", "dataset_fingerprint": manifest.dataset_fingerprint,
                "summary_hooks": list(paths),
                "processor_implementations": [implementation_identity(h) for h in hooks]}
+    if summary_output is not None:
+        summary["source"] = dict(run_dir=str(output), manifest_sha256=digest_file(output / "manifest.json"),
+            detail_index_sha256=digest_file(output / "detail/index.json"),
+            source_summary_sha256=digest_file(output / "summary.json") if (output / "summary.json").exists() else None,
+            run_source_fingerprint=manifest.source_fingerprint)
+        summary["postprocess"] = dict(mode="selected_hooks" if only_hooks is not None else "full")
     for hook in hooks:
-        if hook.namespace in summary: raise ValueError(f"duplicate summary namespace {hook.namespace}")
+        if hook.namespace in summary:
+            raise ValueError(f"duplicate summary namespace {hook.namespace}")
         summary[hook.namespace] = hook.process(detail, manifest)
-    write_json(output / "summary.json", summary)
+    if summary_output is not None:
+        summary["postprocess"].update(elapsed_seconds=round(monotonic() - started, 6),
+                                     verified_detail_files=len(detail._verified))
+        destination.parent.mkdir(parents=True, exist_ok=True)
+    write_json(destination, summary)
     return summary
-
 
 def histogram_hit_summary(histogram, top_k):
     """Exact linear percentiles of discrete hit_count/top_k without expanding rows."""
@@ -117,3 +147,7 @@ class TaskHitRateSummary:
                          hit_count_histogram=[int(n) for n in values])
             groups[name] = stats
         return dict(group_by="request.metadata.task_type", groups=groups)
+
+
+# Public hook path, alongside the existing summary hooks.
+from .token_position import TokenPositionHitRateSummary

@@ -1,0 +1,31 @@
+{
+  "status": "verified",
+  "request_count": 3980,
+  "positions": 512,
+  "annotations": 81510400,
+  "request_token_denominator": 240,
+  "aggregate_mean": 0.8290594329067211,
+  "original_mean": 0.8290594329067211,
+  "all_task_totals_match_original": true,
+  "all_position_request_counts_match": true,
+  "original_manifest_summary_index_unchanged": {
+    "manifest.json": "467038b69e749cb522d82983a7560d28c295187289ea763dd96e418d8185136e",
+    "summary.json": "d8406847fb425c6fbd69446d5c5a1dd0b1bb4b456c09076177878c103d325e66",
+    "detail/index.json": "bc77cadbb91adeb11c7487ef1145057682729b8109dd355159be8ab29dd0b229"
+  },
+  "spotcheck_token_indices": [
+    0,
+    3,
+    15,
+    63,
+    127,
+    255,
+    511
+  ],
+  "spotcheck_request_tokens": 27860,
+  "spotcheck_layer_annotations": 1114400,
+  "spotcheck_mean_and_descending_percentiles_match": true,
+  "independent_check_seconds": 8.327,
+  "selected_access_shards_verified": 4975,
+  "analysis_summary_sha256": "7ee2a7ffb640d8c5a81313c399358bc948e2d1c803b18c061132d2844fa35b94"
+}

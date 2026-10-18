@@ -1,0 +1,68 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "token_index": {
+      "minimum": 0,
+      "title": "Token Index",
+      "type": "integer"
+    },
+    "request_count": {
+      "exclusiveMinimum": 0,
+      "title": "Request Count",
+      "type": "integer"
+    },
+    "expert_hits": {
+      "minimum": 0,
+      "title": "Expert Hits",
+      "type": "integer"
+    },
+    "expert_accesses": {
+      "exclusiveMinimum": 0,
+      "title": "Expert Accesses",
+      "type": "integer"
+    },
+    "mean": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Mean",
+      "type": "number"
+    },
+    "p10": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "P10",
+      "type": "number"
+    },
+    "p50": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "P50",
+      "type": "number"
+    },
+    "p90": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "P90",
+      "type": "number"
+    },
+    "p99": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "P99",
+      "type": "number"
+    }
+  },
+  "required": [
+    "token_index",
+    "request_count",
+    "expert_hits",
+    "expert_accesses",
+    "mean",
+    "p10",
+    "p50",
+    "p90",
+    "p99"
+  ],
+  "title": "TokenPositionPoint",
+  "type": "object"
+}

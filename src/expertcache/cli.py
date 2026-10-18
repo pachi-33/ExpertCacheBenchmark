@@ -3,7 +3,7 @@ import json
 import sys
 from pathlib import Path
 from .contracts import (RunConfig, DatasetManifest, AccessRecord, CacheEvent, RunManifest, DetailIndex,
-                        Profile, SchedulerConfig)
+                        Profile, SchedulerConfig, TokenPositionPoint, TokenPositionMetadata, TokenPositionSummary)
 from .data import Dataset, import_router_dump, build_profile, write_json
 from .detail import DetailReader
 from .runner import Benchmark, load_config
@@ -43,7 +43,11 @@ def main(argv=None):
     profile.add_argument("--max-tokens", type=int)
     post = commands.add_parser("postprocess", help="rebuild summary from sealed detail")
     post.add_argument("run_dir")
-    post.add_argument("--hook", action="append", default=None, help="trusted module:Class; replaces configured extras")
+    selection = post.add_mutually_exclusive_group()
+    selection.add_argument("--hook", action="append", default=None, help="trusted module:Class; replaces configured extras")
+    selection.add_argument("--only-hook", action="append", default=None,
+                           help="run only this trusted module:Class; requires --output")
+    post.add_argument("--output", help="new summary JSON outside the source run; leaves source files unchanged")
     export = commands.add_parser("export-detail", help="export per-layer access annotations as JSONL")
     export.add_argument("run_dir")
     export.add_argument("--output", required=True)
@@ -74,10 +78,11 @@ def main(argv=None):
             write_json(path, value.model_dump(mode="json"))
             result = dict(profile=str(path), requests=len(requests), experts=len(value.entries))
         elif args.command == "postprocess":
-            result = postprocess(args.run_dir, args.hook)
-            path = Path(args.run_dir) / "manifest.json"
-            manifest = RunManifest.model_validate_json(path.read_text())
-            write_json(path, manifest.model_copy(update={"status": "complete"}).model_dump(mode="json"))
+            result = postprocess(args.run_dir, args.hook, only_hooks=args.only_hook, summary_output=args.output)
+            if args.output is None:
+                path = Path(args.run_dir) / "manifest.json"
+                manifest = RunManifest.model_validate_json(path.read_text())
+                write_json(path, manifest.model_copy(update={"status": "complete"}).model_dump(mode="json"))
         elif args.command == "export-detail":
             manifest = RunManifest.model_validate_json((Path(args.run_dir) / "manifest.json").read_text())
             reader = DetailReader(args.run_dir, manifest)
@@ -90,7 +95,8 @@ def main(argv=None):
         else:
             path = Path(args.output)
             path.mkdir(parents=True, exist_ok=True)
-            for cls in (RunConfig, DatasetManifest, AccessRecord, CacheEvent, RunManifest, DetailIndex, Profile):
+            for cls in (RunConfig, DatasetManifest, AccessRecord, CacheEvent, RunManifest, DetailIndex, Profile,
+                        TokenPositionPoint, TokenPositionMetadata, TokenPositionSummary):
                 write_json(path / (cls.__name__ + ".schema.json"), cls.model_json_schema())
             result = dict(schemas=str(path))
     except (ValueError, OSError, TypeError, PermissionError) as exc:

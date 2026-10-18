@@ -404,9 +404,35 @@ class AllHitSummary:
 PYTHONPATH=.:src expertcache postprocess runs/quickstart-lfu --hook my_plugins:AllHitSummary
 ```
 
-结果写入 `summary.json` 的 `all_hit` 字段。也可以在运行配置中设置 `"summary_hooks": ["my_plugins:AllHitSummary"]`。CLI 的 `--hook` 替换配置中的额外 hooks，内置两个 summary 始终保留；namespace 不允许冲突。
+结果写入 `summary.json` 的 `all_hit` 字段。也可以在运行配置中设置 `"summary_hooks": ["my_plugins:AllHitSummary"]`。CLI 的 `--hook` 替换配置中的额外 hooks，默认保留内置两个 summary；`--only-hook` 只运行指定 hook，必须同时指定独立的 `--output`。namespace 不允许冲突。
 
 `detail.access_chunks(phase)` 适合批量处理；`detail.records(phase)` 逐行返回 Pydantic `AccessRecord`；`detail.events()` 迭代缓存事件。后处理只能基于已有 detail 扩展分析；改变容量、调度或策略需要重新回放。
+
+### 按请求内 token 位置分析命中率
+
+`expertcache.summary:TokenPositionHitRateSummary` 从已有 access detail 生成 `hit_rate_by_token_position`，无需原始路由数据集、输出 token IDs 或缓存事件。先对每个 request/token 合并所有有效层，再按 `token_index` 对齐请求，输出总体和 `metadata.task_type` 分组的逐位置曲线。
+
+```bash
+# 仅运行新 hook；输出必须位于原 run 目录之外，且目标文件尚不存在。
+expertcache postprocess runs/strata-full4k-bs1-cache35-shuffled-20261018/strata-35pct \
+  --only-hook expertcache.summary:TokenPositionHitRateSummary \
+  --output runs/token-position-new/summary.json
+
+# 可选绘图依赖；总体、分任务图均输出 PNG 和 SVG。
+python -m pip install -e '.[plots]'
+PYTHONPATH=src python scripts/plot_token_position.py runs/token-position-new/summary.json \
+  --output runs/token-position-new/figures
+```
+
+`--only-hook` 可重复指定多个 hook，与 `--hook` 互斥。独立输出保留输入 manifest/detail 索引/原 summary 的 SHA-256、hook 源码身份、分析耗时和已校验 detail 文件数；原 manifest、summary、detail 均不改写。普通 `postprocess RUN` 仍按原方式重算默认汇总。
+
+每个位置保存 `token_index, request_count, expert_hits, expert_accesses, mean, p10, p50, p90, p99`，由 `TokenPositionSummary` 等 Pydantic 契约约束。`mean = expert_hits / expert_accesses`。当前分母为每请求每 token 的 40 层 × top-k 6 = 240；分位数的样本单位是 **request/token**，与原 `hit_rate` 的逐 request/token/layer 分位数不同。P10/P50/P90/P99 继续采用降序排名和线性插值。
+
+变长请求只参与实际到达的位置，`request_count` 显示每个位置的支持数量，不补零；支持 BS>1、跨分片，以及 `max_tokens` 截断。缺失、重复或越界的 request/token/layer 标注会报错。内部使用请求/token 累计值及层覆盖位图，不展开整个逐层浮点矩阵。
+
+图中位置从 1 开始，默认显示所有原始点；`--window 16` 仅将平均值曲线改为最近 16 个 token 位置的尾随窗口加权均值，分位数仍保持逐位置原值。总体图展示均值、中位数、P10–P90 请求分布区间、P99 和支持请求数；分任务图展示四类均值及支持数量。该分布区间表示请求间差异。
+
+完整 4K Strata / BS=1 / Cache=35% 的已完成分析见 [逐 token 命中率报告](docs/results/strata-full4k-bs1-cache35-token-position-20261018.md)。缓存跨请求保留，起点不是空缓存冷启动；当前曲线包含重复输出样本，不能将位置上的变化单独归因于缓存适应。
 
 <a id="datasets"></a>
 
