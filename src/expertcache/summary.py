@@ -11,19 +11,10 @@ class HitRateSummary:
     namespace = "hit_rate"
 
     def process(self, detail, manifest):
-        # One sample per request/token/layer decision. Never per-request/layer means.
-        rates = [a["hit_count"].astype(np.float64) / manifest.dataset.top_k
-                 for _, a in detail.access_chunks("evaluation")]
-        values = np.concatenate(rates) if rates else np.empty(0)
-        result = dict(sample_unit="request_token_layer", scale="0_to_1", count=int(values.size),
-                      percentile_method="linear", percentile_order="descending", p10=None, p50=None, p90=None, p99=None, mean=None, median=None)
-        # Rank from highest hit rate down: Pp = ascending quantile Q(100-p).
-        if values.size:
-            for name, v in zip(("p10", "p50", "p90", "p99"), np.percentile(values, [90, 50, 10, 1], method="linear")):
-                result[name] = float(v)
-            result["mean"] = float(values.mean())
-            result["median"] = float(np.median(values))
-        return result
+        histogram = np.zeros(manifest.dataset.top_k + 1, dtype=np.int64)
+        for _, chunk in detail.access_chunks("evaluation"):
+            histogram += np.bincount(chunk["hit_count"].astype(np.int64), minlength=len(histogram))
+        return histogram_hit_summary(histogram, manifest.dataset.top_k)
 
 
 class TransferSummary:
@@ -78,3 +69,51 @@ def postprocess(output, extra_hooks=None):
         summary[hook.namespace] = hook.process(detail, manifest)
     write_json(output / "summary.json", summary)
     return summary
+
+
+def histogram_hit_summary(histogram, top_k):
+    """Exact linear percentiles of discrete hit_count/top_k without expanding rows."""
+    counts = np.asarray(histogram, dtype=np.int64)
+    total = int(counts.sum())
+    result = dict(sample_unit="request_token_layer", scale="0_to_1", count=total,
+                  percentile_method="linear", percentile_order="descending",
+                  p10=None, p50=None, p90=None, p99=None, mean=None, median=None)
+    if total:
+        cumulative = np.cumsum(counts)
+        for name, percentile in (("p10", 90), ("p50", 50), ("p90", 10), ("p99", 1)):
+            position = (total - 1) * (percentile / 100)
+            lower, upper = int(np.floor(position)), int(np.ceil(position))
+            low_value = int(np.searchsorted(cumulative, lower, side="right")) / top_k
+            high_value = int(np.searchsorted(cumulative, upper, side="right")) / top_k
+            result[name] = low_value + (position - lower) * (high_value - low_value)
+        result["mean"] = sum(i * int(n) for i, n in enumerate(counts)) / (total * top_k)
+        result["median"] = result["p50"]
+    return result
+
+
+class TaskHitRateSummary:
+    """Aggregate evaluation annotations by request metadata.task_type."""
+    namespace = "hit_rate_by_task"
+
+    def process(self, detail, manifest):
+        requests = manifest.requests["evaluation"]
+        labels = [r.metadata.get("task_type") or "unknown" for r in requests]
+        names = sorted(set(labels))
+        positions = {name: i for i, name in enumerate(names)}
+        request_tasks = np.asarray([positions[name] for name in labels], dtype=np.int64)
+        bins = manifest.dataset.top_k + 1
+        histogram = np.zeros((len(names), bins), dtype=np.int64)
+        for _, chunk in detail.access_chunks("evaluation"):
+            group = request_tasks[chunk["request_index"]]
+            histogram += np.bincount(group * bins + chunk["hit_count"],
+                                     minlength=len(names) * bins).reshape(len(names), bins)
+        groups = {}
+        for i, name in enumerate(names):
+            values = histogram[i]
+            stats = histogram_hit_summary(values, manifest.dataset.top_k)
+            stats.update(requests=labels.count(name),
+                         expert_hits=sum(j * int(n) for j, n in enumerate(values)),
+                         expert_accesses=stats["count"] * manifest.dataset.top_k,
+                         hit_count_histogram=[int(n) for n in values])
+            groups[name] = stats
+        return dict(group_by="request.metadata.task_type", groups=groups)

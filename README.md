@@ -466,6 +466,23 @@ expertcache validate dataset/cascade_balanced_4k/router_results_uint8/benchmark.
 | `expertcache export-detail DIRECTORY --output FILE` | 导出逐层 JSONL，可选 `--phase warmup` |
 | `expertcache schemas --output DIRECTORY` | 从 Pydantic 模型重新导出 JSON Schema |
 
+### 完整 4K 随机回放与按任务汇总
+
+已完成 **Strata / BS=1 / Cache=35%**：总体平均命中率 **82.91%**，评估 3,980 条请求。总体与各任务的 P10/P50/P90/P99、搬运量和核验记录见 [完整 4K 实验结果](docs/results/strata-full4k-bs1-cache35-shuffled-20261018.md)。
+
+```bash
+PYTHONPATH=src python scripts/run_strata_bs1.py \
+  --dataset dataset/cascade_balanced_4k/router_results_uint8/benchmark.json \
+  --output runs/strata-full4k-bs1-cache35-shuffled-20261018 \
+  --cache-percent 35 --seed 20261018 --profile-requests 20 --backend native
+```
+
+该命令先按固定种子打乱 4,000 条请求，用前 20 条生成独立 profile，再以 BS=1 评估其余 3,980 条。35% 常驻容量为 3,584 units，另有 1 unit workspace；请求之间共享连续的缓存状态。输出保留 `request-order.json`、profile、逐层 detail、缓存事件、`summary.json`、`results.json`、`results.md` 与 `progress.json`，记录完整耗时。
+
+`summary_hooks=["expertcache.summary:TaskHitRateSummary"]` 可给任意常规实验补充 `hit_rate_by_task`：按请求的 `metadata.task_type` 聚合请求数、标注数、P10/P50/P90/P99、平均命中率与命中数直方图。分组在后处理阶段进行，统计单位仍为逐 request/token/layer；分位数从高到低排名，使用精确线性插值。总体命中率汇总也采用直方图实现，内存占用不再随标注数增长。
+
+`--backend native` 是可选的 Strata BS=1 执行入口，需要 C++17 编译器（clang++ 或 g++）和 zlib 开发环境。它仅支持内置 Strata、uint8 路由、profile 初始化、全局单位大小专家池和即时搬运；通用 Python runner 继续支持其他策略和 hooks，可用 `--backend python` 运行同一实验。原生入口保存标准 detail 和缓存事件，独立扫描完整事件流核对搬运量，并与逐层 miss 总数交叉检查。执行后端、参考策略、C++ 源码和二进制哈希写入 manifest；标准 `expertcache postprocess` 也能读取这些输出重新汇总。
+
 ### 容量扫描
 
 已有 `runs/profile-train20.json` 后，可执行 LFU/Strata/Belady 在 10%、15%、25%、30%、35%、50% 容量下的完整留出集扫描：

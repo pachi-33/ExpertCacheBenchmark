@@ -161,7 +161,7 @@ class Benchmark:
                     policy_implementation=implementation_identity(self.policy)["class"],
                     cache=self.engine.state_dict(), policy=self.policy.state_dict())
 
-    def run(self, output, progress=None):
+    def run(self, output, progress=None, *, postprocessor=postprocess):
         if self._ran:
             raise RuntimeError("Benchmark instances are single-use; create a new instance for each run")
         self._ran = True
@@ -229,6 +229,6 @@ class Benchmark:
             write_json(output / "manifest.json", manifest.model_copy(update={"status": "failed", "error": str(exc)}).model_dump(mode="json"))
             raise
         # Postprocess failures preserve sealed detail, so fixing a hook needs no replay.
-        result = postprocess(output)
+        result = postprocessor(output)
         write_json(output / "manifest.json", manifest.model_copy(update={"status": "complete"}).model_dump(mode="json"))
         return result

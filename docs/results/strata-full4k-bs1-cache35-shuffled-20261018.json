@@ -1,0 +1,290 @@
+{
+  "created_at_utc": "2026-10-18T06:59:11.246611+00:00",
+  "elapsed_seconds": 399.915,
+  "preparation_seconds": 7.643,
+  "benchmark_seconds": 392.272,
+  "experiment": {
+    "policy": "strata",
+    "backend": "native",
+    "batch_size": 1,
+    "cache_percent": 35,
+    "capacity_units": 3584,
+    "workspace_units": 1,
+    "expert_units": 1,
+    "expert_count": 10240,
+    "request_order": "shuffled",
+    "seed": 20261018,
+    "initialization": "profile",
+    "profile_requests": 20,
+    "evaluation_requests": 3980,
+    "evaluation_tokens": 2037760,
+    "expected_annotations": 81510400,
+    "percentile_order": "descending",
+    "sample_unit": "request_token_layer",
+    "profile_tasks": {
+      "coding_swe": 4,
+      "chat": 7,
+      "agent": 6,
+      "math": 3
+    },
+    "evaluation_tasks": {
+      "chat": 993,
+      "agent": 994,
+      "coding_swe": 996,
+      "math": 997
+    }
+  },
+  "run_dir": "/private/tmp/ExpertCacheBenchmark-strata-full4k-bs1-cache35-shuffled-20261018/strata-35pct",
+  "config": {
+    "schema_version": "1.0",
+    "dataset": "/Users/yaobao/Desktop/Workspace-Ascend/ExpertCacheBenchmark/dataset/cascade_balanced_4k/router_results_uint8/benchmark.json",
+    "cache": {
+      "capacity_units": 3584,
+      "workspace_units": 1,
+      "default_expert_units": 1,
+      "expert_sizes": [],
+      "unit_name": "virtual_expert",
+      "allocation": "global",
+      "layer_capacity_units": {}
+    },
+    "initialization": {
+      "mode": "profile",
+      "experts": [],
+      "profile_path": "/private/tmp/ExpertCacheBenchmark-strata-full4k-bs1-cache35-shuffled-20261018/profile-train20.json",
+      "warmup_dataset": null,
+      "warmup_max_requests": null,
+      "warmup_max_tokens": null,
+      "snapshot_path": null
+    },
+    "policy": {
+      "name": "strata",
+      "params": {}
+    },
+    "scheduler": {
+      "batch_size": 1,
+      "order": "shuffled",
+      "seed": 20261018,
+      "request_offset": 20,
+      "max_requests": null,
+      "max_tokens": null
+    },
+    "visibility": "causal",
+    "timing_mode": "instant",
+    "summary_hooks": [
+      "expertcache.summary:TaskHitRateSummary"
+    ],
+    "detail_chunk_rows": 16384
+  },
+  "dataset_fingerprint": "6c79ef04b7d879b6e43e99cc09c11296ade7866c6a7cfda5c488720fa7844a3f",
+  "framework_revision": "8bdfba64080b92481f608e495254734b8500849d",
+  "source_fingerprint": "c4783d194afe72a76850b5001c43c8028f488296c31c100300bbb0397de2f84a",
+  "profile_sha256": "32acf928b5c8bdd5e94f18d04b668cb96e600924b4f14604db63776d4b4afdd0",
+  "request_order_sha256": "e0e32f1c937c31fea6e74e39761012db14cf2f8fa00fc63c3f1004bbcb3f9e4e",
+  "manifest_sha256": "467038b69e749cb522d82983a7560d28c295187289ea763dd96e418d8185136e",
+  "summary_sha256": "d8406847fb425c6fbd69446d5c5a1dd0b1bb4b456c09076177878c103d325e66",
+  "detail_index_sha256": "bc77cadbb91adeb11c7487ef1145057682729b8109dd355159be8ab29dd0b229",
+  "execution_backend": {
+    "name": "compiled_strata_bs1",
+    "cpp_sha256": "62616c1f1ae92fe9071fea9333a202b8f179f9604dfc7a5a676b0522dbd0785d",
+    "executable_sha256": "2138d67c08841b128bc9056c46f15f12549d08d6acd1915b4971b0d5f54ac8e5",
+    "compiler": "/usr/bin/clang++",
+    "compiler_version": "Apple clang version 17.0.0 (clang-1700.0.13.5)",
+    "compiler_flags": [
+      "-std=c++17",
+      "-O3",
+      "-ffp-contract=off"
+    ],
+    "reference_policy": {
+      "class": "expertcache.policies.strata:Strata",
+      "source_sha256": "c66f7d491c1279c52a2aa99db97f2a438599bc84fab04aab30039f840e8fec9d"
+    },
+    "ordered_routes_sha256": "7fece65de0bf6ef9c9e05c1e79bc275da402e924ed36a0fd7fa3fe9ea91ca2c8"
+  },
+  "policy_metadata": {
+    "source_commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+    "source_url": "https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/src/program/generate.cpp",
+    "variant": "synchronous_residency_policy",
+    "clock_unit": "decode_step",
+    "tie_break": "layer_id_then_expert_id",
+    "score_dtype": "float32",
+    "params": {
+      "adapt_every": 4,
+      "decay": 0.7,
+      "min_count": 2.0,
+      "min_gain": 1.5,
+      "max_swaps": 96
+    },
+    "adaptations": 509440,
+    "swaps": 11010083,
+    "limitations": [
+      "No MTP verification-window trace",
+      "All misses use streamed weight loading; no CPU expert execution",
+      "No asynchronous copy overlap, multi-device ownership, or eviction writeback"
+    ]
+  },
+  "hit_rate": {
+    "sample_unit": "request_token_layer",
+    "scale": "0_to_1",
+    "count": 81510400,
+    "percentile_method": "linear",
+    "percentile_order": "descending",
+    "p10": 1.0,
+    "p50": 0.8333333333333334,
+    "p90": 0.6666666666666666,
+    "p99": 0.3333333333333333,
+    "mean": 0.8290594329067211,
+    "median": 0.8333333333333334
+  },
+  "hit_rate_by_task": {
+    "agent": {
+      "sample_unit": "request_token_layer",
+      "scale": "0_to_1",
+      "count": 20357120,
+      "percentile_method": "linear",
+      "percentile_order": "descending",
+      "p10": 1.0,
+      "p50": 0.8333333333333334,
+      "p90": 0.5,
+      "p99": 0.3333333333333333,
+      "mean": 0.8298992850331154,
+      "median": 0.8333333333333334,
+      "requests": 994,
+      "expert_hits": 101366156,
+      "expert_accesses": 122142720,
+      "hit_count_histogram": [
+        26511,
+        136688,
+        484654,
+        1441869,
+        3513591,
+        6642653,
+        8111154
+      ]
+    },
+    "chat": {
+      "sample_unit": "request_token_layer",
+      "scale": "0_to_1",
+      "count": 20336640,
+      "percentile_method": "linear",
+      "percentile_order": "descending",
+      "p10": 1.0,
+      "p50": 0.8333333333333334,
+      "p90": 0.6666666666666666,
+      "p99": 0.3333333333333333,
+      "mean": 0.8437896328990433,
+      "median": 0.8333333333333334,
+      "requests": 993,
+      "expert_hits": 102959076,
+      "expert_accesses": 122019840,
+      "hit_count_histogram": [
+        18913,
+        100079,
+        378699,
+        1220001,
+        3276333,
+        6719426,
+        8623189
+      ]
+    },
+    "coding_swe": {
+      "sample_unit": "request_token_layer",
+      "scale": "0_to_1",
+      "count": 20398080,
+      "percentile_method": "linear",
+      "percentile_order": "descending",
+      "p10": 1.0,
+      "p50": 0.8333333333333334,
+      "p90": 0.5,
+      "p99": 0.3333333333333333,
+      "mean": 0.8043131592123703,
+      "median": 0.8333333333333334,
+      "requests": 996,
+      "expert_hits": 98438665,
+      "expert_accesses": 122388480,
+      "hit_count_histogram": [
+        26723,
+        154566,
+        597593,
+        1794565,
+        4156546,
+        6929488,
+        6738599
+      ]
+    },
+    "math": {
+      "sample_unit": "request_token_layer",
+      "scale": "0_to_1",
+      "count": 20418560,
+      "percentile_method": "linear",
+      "percentile_order": "descending",
+      "p10": 1.0,
+      "p50": 0.8333333333333334,
+      "p90": 0.6666666666666666,
+      "p99": 0.3333333333333333,
+      "mean": 0.838272458978498,
+      "median": 0.8333333333333334,
+      "requests": 997,
+      "expert_hits": 102697899,
+      "expert_accesses": 122511360,
+      "hit_count_histogram": [
+        15708,
+        91491,
+        365381,
+        1245734,
+        3479533,
+        7103966,
+        8116747
+      ]
+    }
+  },
+  "transfer": {
+    "unit_name": "virtual_expert",
+    "phases": {
+      "initialization": {
+        "load_count": 3584,
+        "units": 3584,
+        "evictions": 0,
+        "demand_units": 0,
+        "prefetch_units": 0,
+        "initialization_units": 3584,
+        "adaptation_units": 0,
+        "other_units": 0
+      },
+      "warmup": {
+        "load_count": 0,
+        "units": 0,
+        "evictions": 0,
+        "demand_units": 0,
+        "prefetch_units": 0,
+        "initialization_units": 0,
+        "adaptation_units": 0,
+        "other_units": 0
+      },
+      "evaluation": {
+        "load_count": 94610687,
+        "units": 94610687,
+        "evictions": 11010083,
+        "demand_units": 83600604,
+        "prefetch_units": 0,
+        "initialization_units": 0,
+        "adaptation_units": 11010083,
+        "other_units": 0
+      }
+    },
+    "total_units": 94614271,
+    "evaluation_miss_occurrences": 83600604,
+    "evaluation_unique_miss_demands": 83600604,
+    "evaluation_coalesced_miss_occurrences": 0
+  },
+  "archive": {
+    "status": "verified",
+    "original_root": "/private/tmp/ExpertCacheBenchmark-strata-full4k-bs1-cache35-shuffled-20261018",
+    "archive_root": "/Users/yaobao/Desktop/Workspace-Ascend/ExpertCacheBenchmark/runs/strata-full4k-bs1-cache35-shuffled-20261018",
+    "archive_relative": "runs/strata-full4k-bs1-cache35-shuffled-20261018",
+    "file_count": 5045,
+    "total_bytes": 7224034828,
+    "inventory": "docs/results/strata-full4k-bs1-cache35-shuffled-20261018-archive.json",
+    "verification": "docs/results/strata-full4k-bs1-cache35-shuffled-20261018-verification.json",
+    "source_snapshot": "runs/strata-full4k-bs1-cache35-shuffled-20261018/source-snapshot"
+  }
+}

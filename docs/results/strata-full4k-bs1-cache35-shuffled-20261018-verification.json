@@ -1,0 +1,90 @@
+{
+  "status": "verified",
+  "annotations": 81510400,
+  "expert_accesses": 489062400,
+  "expert_hits": 405461796,
+  "expert_misses": 83600604,
+  "hit_count_histogram": [
+    87855,
+    482824,
+    1826327,
+    5702169,
+    14426003,
+    27395533,
+    31589689
+  ],
+  "task_histograms": {
+    "agent": [
+      26511,
+      136688,
+      484654,
+      1441869,
+      3513591,
+      6642653,
+      8111154
+    ],
+    "chat": [
+      18913,
+      100079,
+      378699,
+      1220001,
+      3276333,
+      6719426,
+      8623189
+    ],
+    "coding_swe": [
+      26723,
+      154566,
+      597593,
+      1794565,
+      4156546,
+      6929488,
+      6738599
+    ],
+    "math": [
+      15708,
+      91491,
+      365381,
+      1245734,
+      3479533,
+      7103966,
+      8116747
+    ]
+  },
+  "all_route_ids_match_dataset": true,
+  "all_hit_counts_match_masks": true,
+  "coverage_and_order_verified": true,
+  "request_shuffle_verified": true,
+  "profile_evaluation_disjoint": true,
+  "profile_initialization_verified": true,
+  "means_and_descending_percentiles_verified": true,
+  "task_aggregation_verified": true,
+  "manifest_summary_detail_checksums_verified": true,
+  "sealed_event_audit": {
+    "event_count": 200238625,
+    "initialization_units": 3584,
+    "demand_units": 83600604,
+    "adaptation_units": 11010083,
+    "phases": [
+      {
+        "load_count": 3584,
+        "units": 3584,
+        "evictions": 0
+      },
+      {
+        "load_count": 0,
+        "units": 0,
+        "evictions": 0
+      },
+      {
+        "load_count": 94610687,
+        "units": 94610687,
+        "evictions": 11010083
+      }
+    ],
+    "events_sha256": "5376af95c41250d3b65567c8c2a6ffb6e62c9f30e51082a097508f357dfc6893",
+    "detail_misses": 83600604,
+    "status": "verified"
+  },
+  "verification_elapsed_seconds": 18.184
+}
