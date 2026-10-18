@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "source": "/home/y00951466/sglang_exprt_dump/dataset/cascade_balanced_4k/final_prompt.jsonl",
+  "source_rows": 4000,
+  "source_bytes": 195070898,
+  "source_sha256": "33ae453a0350d175b82d72eddbfb6dea34f974b857a877ac1edfccb0190fd94b",
+  "manifest_source": "/home/y00951466/sglang_exprt_dump/dataset/cascade_balanced_4k/final_prompt_manifest.json",
+  "manifest_sha256": "ae794918f87a7c218224afc73495731a06087e739603c833cd300a0b83a3d436",
+  "split_parts": 228,
+  "split_bytes_limit": 950000,
+  "max_commit_added_bytes": 1048576
+}

@@ -1,0 +1,48 @@
+{
+  "source_dataset": "/home/y00951466/sglang_exprt_dump/dataset/cascade_balanced_4k/samples.jsonl",
+  "output": "/home/y00951466/sglang_exprt_dump/dataset/cascade_balanced_4k/final_prompt.jsonl",
+  "selection": "messages before the final assistant message",
+  "encoder": "sglang.srt.entrypoints.openai.encoding_dsv4.encode_messages",
+  "thinking_mode": "chat",
+  "source_samples": 4000,
+  "written_prompts": 4000,
+  "task_counts": {
+    "math": 1000,
+    "chat": 1000,
+    "agent": 1000,
+    "coding_swe": 1000
+  },
+  "source_file_counts": {
+    "math/math_notool.jsonl": 400,
+    "math/math_proof.jsonl": 300,
+    "math/math_tool.jsonl": 300,
+    "chat/chat_part_1.jsonl": 250,
+    "chat/chat_part_2.jsonl": 250,
+    "chat/chat_part_3.jsonl": 250,
+    "chat/chat_part_4.jsonl": 250,
+    "conversational_agent/conversational_agent.jsonl": 500,
+    "terminal_agent/terminal_agent.jsonl": 500,
+    "swe/swe_agentic.jsonl": 500,
+    "swe/swe_agentless.jsonl": 500
+  },
+  "prompt_chars": {
+    "min": 51,
+    "mean": 46890.23,
+    "max": 552793
+  },
+  "context_messages": {
+    "min": 2,
+    "mean": 20.12,
+    "max": 200
+  },
+  "skipped": [],
+  "output_schema": {
+    "prompt_id": "sample_id plus final assistant target index",
+    "sample_id": "original top-level sample_id",
+    "task_type": "math | chat | agent | coding_swe",
+    "source_file": "original source JSONL",
+    "assistant_turn_index": "index of the excluded final assistant target",
+    "context_message_count": "messages included in the prompt",
+    "prompt": "fully rendered DeepSeek-V4 prompt string"
+  }
+}
